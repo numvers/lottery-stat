@@ -7,7 +7,6 @@ export default {
     screens: {
       sm: { max: "420px" },
       md: { min: "421px", max: "1023px" },
-      lg: { min: "1024px" },
     },
     fontFamily: {
       Pretendard: ["Pretendard"],
