@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { ReactNode } from "react";
+import NavBar from "./NavBar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -7,22 +7,10 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <Centering>
-      <FixedWidth>{children}</FixedWidth>
-    </Centering>
+    <div className="flex justify-center items-center">
+      <div className="container  w-[500px]  bg-num-yellow sm:w-screen">
+        {children}
+      </div>
+    </div>
   );
 }
-
-const Centering = styled.div`
-  display: flex;
-  justify-content: center;
-  background-color: gainsboro;
-`;
-const FixedWidth = styled.div`
-  width: 500px;
-  background-color: wheat;
-  @media (max-width: 500px) {
-    /* 화면 너비가 500px 이하가 되면 요소 너비를 100%로 고정*/
-    width: 100%;
-  }
-`;
