@@ -1,11 +1,11 @@
-import Seo from "components/Seo";
+import NavBar from "~/components/NavBar";
+import Seo from "~/components/Seo";
 
 export default function Home() {
   return (
     <>
-      <Seo title="numbers" />
-      <main className=" flex h-screen flex-col items-center justify-center">
-        <div className="sm:bg-num-blue md:bg-num-red bg-num-green container flex    flex-col items-center justify-center">
+      <main>
+        <div className=" container   ">
           테스트
         </div>
       </main>
