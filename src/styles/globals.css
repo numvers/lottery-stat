@@ -21,7 +21,6 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
     background: #FFFFFF;
-    color: #1C1919;
     overscroll-behavior: none;
 }
 
@@ -50,9 +49,9 @@ table {
 
 a {
     text-decoration: none;
-    color: var(--black);
+    color: #000000;
 }
 a:link, a:visited, a:hover {
     text-decoration: none;
-    color: var(--black);
+    color: #000000;
 }
