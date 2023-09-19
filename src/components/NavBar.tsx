@@ -32,14 +32,14 @@ export default function NavBar() {
 
   return (
     <nav>
-      <div className="fixed bottom-0 z-10 h-[70px] w-[500px] rounded-t-[20px] bg-num-black/[.6] sm:w-screen">
+      <div className="fixed bottom-0 z-10 h-[70px] w-[500px] rounded-t-[20px] bg-black/[.6] sm:w-screen">
         <ul className="mt-[12px]">
           {navMenu.map((menu, idx) => {
             return (
               <li
                 key={idx}
                 className={`float-left grid h-[50px] w-[25%] cursor-pointer place-items-center text-xs ${
-                  activeTap === idx ? "text-[white]" : "text-[white]/[.5]"
+                  activeTap === idx ? "text-white" : "text-white/[.5]"
                 }`}
                 onClick={() => clickHandler(idx)}
               >

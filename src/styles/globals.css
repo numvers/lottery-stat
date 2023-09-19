@@ -53,9 +53,9 @@ table {
 
 a {
     text-decoration: none;
-    color: var(--num-black);
+    color: var(--black);
 }
 a:link, a:visited, a:hover {
     text-decoration: none;
-    color: var(--num-black);
+    color: var(--black);
 }
