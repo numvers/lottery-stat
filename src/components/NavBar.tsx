@@ -1,49 +1,57 @@
 import Image from "next/image";
 import { useState } from "react";
 
-
 export default function NavBar() {
   const navMenu = [
     {
       name: "홈",
-      path: "/home",
-      img: '/img/icon_home_fill.svg',
+      path: "/",
+      img: "/img/icon_home_fill.svg",
     },
     {
       name: "번호 검색",
-      path: "/home",
-      img: '/img/icon_serch_fill.svg',
+      path: "/serch",
+      img: "/img/icon_serch_fill.svg",
     },
     {
       name: "번호 뽑기",
-      path: "/home",
-      img: '/img/icon_heart_fill.svg',
+      path: "/select",
+      img: "/img/icon_heart_fill.svg",
     },
     {
       name: "커뮤니티",
-      path: "/home",
-      img: '/img/icon_message_fill.svg',
+      path: "/community",
+      img: "/img/icon_message_fill.svg",
     },
   ];
 
-  const [activeTap, setActiveTap] = useState("");
+  const [activeTap, setActiveTap] = useState(0);
   const clickHandler = (idx: number) => {
-    setActiveTap(idx.toString());
-
-    // navigate(navMenu[idx].path);
+    setActiveTap(idx);
   };
 
   return (
     <nav>
-      <div className="fixed bottom-0  z-10 h-[70px] w-[500px] rounded-t-[20px] bg-num-black/[.6] sm:w-screen ">
-        <ul>
+      <div className="fixed bottom-0 z-10 h-[70px] w-[500px] rounded-t-[20px] bg-num-black/[.6] sm:w-screen">
+        <ul className="mt-[12px]">
           {navMenu.map((menu, idx) => {
             return (
               <li
                 key={idx}
-                className="float-left grid h-[60px] w-[25%] place-items-center "
+                className={`float-left grid h-[50px] w-[25%] cursor-pointer place-items-center text-xs ${
+                  activeTap === idx ? "text-[white]" : "text-[white]/[.5]"
+                }`}
+                onClick={() => clickHandler(idx)}
               >
-                <Image src={menu.img} alt="img" width={23} height={23} />
+                <Image
+                  src={menu.img}
+                  alt="img"
+                  width={20}
+                  height={23}
+                  className={`${
+                    activeTap === idx ? "opacity-100" : "opacity-50"
+                  }`}
+                />
                 {menu.name}
               </li>
             );
