@@ -21,6 +21,12 @@ export default {
       xxxl: "32px",
       xxxxl: "40px",
     },
+    fontWeight: {
+      regular: "400",
+      medium: "500",
+      semibold: "600",
+      bold: "700",
+    },
     colors: {
       white: "#ffffff",
       black: "#000000",
