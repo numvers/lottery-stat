@@ -10,7 +10,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Seo title="UJULOTTO" />
-      <div className=" w-[500px] sm:w-screen m-auto  bg-num-yellow h-screen">
+      <div className=" w-[500px] sm:w-screen m-auto  bg-num-black text-[white] h-screen">
         <div>{children}</div>
         <NavBar />
       </div>

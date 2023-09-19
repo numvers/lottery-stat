@@ -6,22 +6,22 @@ export default function NavBar() {
     {
       name: "홈",
       path: "/",
-      img: "/img/icon_home_fill.svg",
+      img: "/img/icon_home.svg",
     },
     {
       name: "번호 검색",
       path: "/serch",
-      img: "/img/icon_serch_fill.svg",
+      img: "/img/icon_serch.svg",
     },
     {
       name: "번호 뽑기",
       path: "/select",
-      img: "/img/icon_heart_fill.svg",
+      img: "/img/icon_heart.svg",
     },
     {
       name: "커뮤니티",
       path: "/community",
-      img: "/img/icon_message_fill.svg",
+      img: "/img/icon_message.svg",
     },
   ];
 
