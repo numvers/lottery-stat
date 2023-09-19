@@ -32,7 +32,7 @@ export default function NavBar() {
 
   return (
     <nav>
-      <div className="fixed bottom-0 z-10 h-[70px] w-[500px] rounded-t-[20px] bg-black/[.6] sm:w-screen">
+      <div className="fixed bottom-0 z-10 h-[70px] w-[500px] rounded-t-[20px] bg-black/[.6]">
         <ul className="mt-[12px]">
           {navMenu.map((menu, idx) => {
             return (

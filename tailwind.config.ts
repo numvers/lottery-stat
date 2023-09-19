@@ -6,7 +6,7 @@ export default {
     extend: {},
     screens: {
       sm: { max: "420px" },
-      md: { min: "421px", max: "1023px" },
+      md: { min: "421px" },
     },
     fontFamily: {
       Pretendard: ["Pretendard"],
@@ -17,8 +17,9 @@ export default {
       base: "16px",
       lg: "20px",
       xl: "24px",
-      xxl: "32px",
-      xxxl: "40px",
+      xxl: "26px",
+      xxxl: "32px",
+      xxxxl: "40px",
     },
     colors: {
       white: "#ffffff",
