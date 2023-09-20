@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import {
   calculateTimeRemaining,
@@ -87,12 +87,6 @@ export function RecentLotteryCardComponent({
 }: {
   recentData: LotteryResult;
 }) {
-  const [prize, setPrize] = useState(0);
-  useEffect(() => {
-    if (recentData.wins[0] !== undefined) {
-      setPrize(recentData.wins[0]?.prize);
-    }
-  }, [recentData]);
   return (
     <>
       <div className="relative h-[13.75rem] rounded-[1.25rem] bg-white py-[1.875rem] text-black">
@@ -116,7 +110,7 @@ export function RecentLotteryCardComponent({
           <span className="font-semibold">1등 총상금</span>
           {recentData.wins[0]?.num_winners}명/
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
-            {formatMoney(prize)}
+            {formatMoney(recentData.wins[0]?.prize ?? 0)}
           </span>
         </h3>
       </div>
