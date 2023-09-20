@@ -11,8 +11,8 @@ export default function NavBar() {
     },
     {
       name: "번호 검색",
-      path: "/serch",
-      img: "/img/icon_serch.svg",
+      path: "/search",
+      img: "/img/icon_search.svg",
     },
     {
       name: "번호 뽑기",
