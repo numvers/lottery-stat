@@ -28,9 +28,7 @@ export default function Home({
     <>
       <main className="sm:w-screen md:w-[22.5rem] ">
         <div className="h-[3.75rem] bg-red">Logo</div>
-        <div className="px-[1.25rem]">
-          번호검색
-        </div>
+        <div className="px-[1.25rem]">번호검색</div>
       </main>
     </>
   );
@@ -38,15 +36,16 @@ export default function Home({
 
 export async function getServerSideProps() {
   // 전체 당첨번호 조회
-  const allResponse = await fetch("http://localhost:3000/api/lotteries-all");
+  const allResponse = await fetch(
+    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
+  );
   // 가장 최신의 당첨번호 조회 (/lotteries/0 로 호출)
   const recentResponse = await fetch(
-    "http://localhost:3000/api/lotteries-latest",
+    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries/0",
   );
 
   return {
-    props: {
-    },
+    props: {},
   };
 }
 

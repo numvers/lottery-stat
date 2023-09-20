@@ -225,10 +225,12 @@ export function CommunityCardComponent() {
 
 export async function getServerSideProps() {
   // 전체 당첨번호 조회
-  const allResponse = await fetch("http://localhost:3000/api/lotteries-all");
+  const allResponse = await fetch(
+    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
+  );
   // 가장 최신의 당첨번호 조회 (/lotteries/0 로 호출)
   const recentResponse = await fetch(
-    "http://localhost:3000/api/lotteries-latest",
+    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries/0",
   );
 
   const allData = (await allResponse.json()) as LotteryResult;
