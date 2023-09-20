@@ -35,3 +35,11 @@ export const formatDate = (inputDate: string) => {
 
   return `${year}년 ${month}월 ${day}일`;
 };
+
+export const formatMoney = (money: number) => {
+  const hundredMillion = Math.trunc(money / 10_000_000);
+  if (hundredMillion == 0) {
+    return `${money % 1_000}천 만원`;
+  }
+  return `${hundredMillion}억원`;
+};

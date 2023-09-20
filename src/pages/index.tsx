@@ -1,12 +1,12 @@
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import LotteryNumberBall from "~/components/LotteryNumberBall";
 import {
   calculateTimeRemaining,
   formatDate,
+  formatMoney,
   getEraseFourDigits,
 } from "../module/Util";
-import { useEffect, useState } from "react";
-import LotteryNumberBall from "~/components/LotteryNumberBall";
-import { numToKorean, FormatOptions } from "num-to-korean";
 
 interface LotteryResult {
   round: number;
@@ -112,12 +112,11 @@ export function RecentLotteryCardComponent({
           />
         </div>
         <LotteryNumberBall numbers={recentData.numbers} />
-        {numToKorean(prize, FormatOptions.MIXED)}
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#A090FF] text-base leading-[4rem] text-white">
           <span className="font-semibold">1등 총상금</span>
           {recentData.wins[0]?.num_winners}명/
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
-            000억원
+            {formatMoney(prize)}
           </span>
         </h3>
       </div>
