@@ -16,5 +16,17 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/lotteries-all',
+        destination: 'http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries',
+      },
+      {
+        source: '/api/lotteries-latest',
+        destination: 'http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries/0',
+      },
+    ]
+  }
 };
 export default config;

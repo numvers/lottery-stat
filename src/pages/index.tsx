@@ -3,10 +3,10 @@ import {
   calculateTimeRemaining,
   formatDate,
   getEraseFourDigits,
-  getNumberToKorean,
 } from "../module/Util";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
+import { numToKorean, FormatOptions } from "num-to-korean";
 
 interface LotteryResult {
   round: number;
@@ -87,6 +87,12 @@ export function RecentLotteryCardComponent({
 }: {
   recentData: LotteryResult;
 }) {
+  const [prize, setPrize] = useState(0);
+  useEffect(() => {
+    if (recentData.wins[0] !== undefined) {
+      setPrize(recentData.wins[0]?.prize);
+    }
+  }, [recentData]);
   return (
     <>
       <div className="relative h-[13.75rem] rounded-[1.25rem] bg-white py-[1.875rem] text-black">
@@ -106,10 +112,10 @@ export function RecentLotteryCardComponent({
           />
         </div>
         <LotteryNumberBall numbers={recentData.numbers} />
+        {numToKorean(prize, FormatOptions.MIXED)}
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#A090FF] text-base leading-[4rem] text-white">
-          <span className="font-semibold">1등 총상금</span>(
-          {recentData.wins[0]?.num_winners}명/00억
-          {/* {getNumberToKorean(recentData.wins[0]?.prize)} */})
+          <span className="font-semibold">1등 총상금</span>
+          {recentData.wins[0]?.num_winners}명/
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
             000억원
           </span>
@@ -129,14 +135,17 @@ export function RecentLotteryListCardComponent({
     <>
       <div className="relative h-[13.75rem] rounded-[1.25rem] bg-white p-[1.25rem] text-sm text-black">
         <div className="grid grid-cols-3 grid-rows-6 ">
-          <ul className="col-span-3 grid grid-cols-3 rounded-[0.375rem] bg-point/[0.1]  items-center  font-bold">
+          <ul className="col-span-3 grid grid-cols-3 items-center rounded-[0.375rem]  bg-point/[0.1]  font-bold">
             <li className="col-span-1">순위</li>
             <li className="col-span-1">1인당 당첨금액</li>
             <li className="col-span-1">당첨인원</li>
           </ul>
           {allData.slice(0, 5).map((item, idx) => {
             return (
-              <ul key={idx} className="col-span-3 mt-[0.625rem] grid grid-cols-3">
+              <ul
+                key={idx}
+                className="col-span-3 mt-[0.625rem] grid grid-cols-3"
+              >
                 <li className="col-span-1 font-semibold">{idx + 1}</li>
                 <li className="col-span-1 font-regular">
                   {getEraseFourDigits(item.wins[0]?.prize)}원
@@ -162,11 +171,11 @@ export function CommunityCardComponent() {
         로또를 이용하는 전국의 사용자들과 소통해요!
       </span>
       <div className="grid  grid-cols-2 gap-2 text-base text-black">
-        <div className="relative col-span-2 h-[13.75rem] cursor-pointer rounded-[1.25rem] bg-blue p-[1.25rem] text-white overflow-hidden ">
-          <h2 className="mb-[0.4375rem] font-semibold relative z-10">
+        <div className="relative col-span-2 h-[13.75rem] cursor-pointer overflow-hidden rounded-[1.25rem] bg-blue p-[1.25rem] text-white ">
+          <h2 className="relative z-10 mb-[0.4375rem] font-semibold">
             1등 당첨이 가장 많이 배출된 곳은?
           </h2>
-          <span className="text-xs relative z-10">
+          <span className="relative z-10 text-xs">
             전국에 포진된 복권 판매점을 한눈에 알아봐요!
           </span>
           <Image
@@ -176,8 +185,8 @@ export function CommunityCardComponent() {
             height={36}
             className="absolute bottom-[1.25rem] right-[1.25rem]"
           />
-          <div className="absolute right-[1.69rem] bottom-[5.19rem] w-[7.1875rem] h-[7.1875rem] bg-point rounded-full" />
-          <div className="absolute left-[0.87rem] top-[7.44rem] w-[7.1875rem] h-[7.1875rem] bg-point rounded-full" />
+          <div className="absolute bottom-[5.19rem] right-[1.69rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
+          <div className="absolute left-[0.87rem] top-[7.44rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
         </div>
         <div className="relative h-[13.75rem] cursor-pointer rounded-[1.25rem] bg-gray_2 p-[1.25rem]">
           <h2 className="mb-[0.4375rem] font-semibold">톡톡 로또</h2>
@@ -216,12 +225,10 @@ export function CommunityCardComponent() {
 
 export async function getServerSideProps() {
   // 전체 당첨번호 조회
-  const allResponse = await fetch(
-    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
-  );
+  const allResponse = await fetch("http://localhost:3000/api/lotteries-all");
   // 가장 최신의 당첨번호 조회 (/lotteries/0 로 호출)
   const recentResponse = await fetch(
-    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries/0",
+    "http://localhost:3000/api/lotteries-latest",
   );
 
   const allData = (await allResponse.json()) as LotteryResult;
