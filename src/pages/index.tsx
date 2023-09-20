@@ -1,12 +1,13 @@
 import Image from "next/image";
+import { FormatOptions, numToKorean } from "num-to-korean";
+import { useEffect, useState } from "react";
+import LotteryNumberBall from "~/components/LotteryNumberBall";
+import { env } from "../env.mjs";
 import {
   calculateTimeRemaining,
   formatDate,
   getEraseFourDigits,
 } from "../module/Util";
-import { useEffect, useState } from "react";
-import LotteryNumberBall from "~/components/LotteryNumberBall";
-import { numToKorean, FormatOptions } from "num-to-korean";
 
 interface LotteryResult {
   round: number;
@@ -225,11 +226,9 @@ export function CommunityCardComponent() {
 
 export async function getServerSideProps() {
   // 전체 당첨번호 조회
-  const allResponse = await fetch("http://localhost:3000/api/lotteries-all");
+  const allResponse = await fetch(env.LOTTERY_BACKEND_HOST + "/lotteries");
   // 가장 최신의 당첨번호 조회 (/lotteries/0 로 호출)
-  const recentResponse = await fetch(
-    "http://localhost:3000/api/lotteries-latest",
-  );
+  const recentResponse = await fetch(env.LOTTERY_BACKEND_HOST + "/lotteries/0");
 
   const allData = (await allResponse.json()) as LotteryResult;
   const recentData = (await recentResponse.json()) as LotteryResult;
