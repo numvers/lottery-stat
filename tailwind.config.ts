@@ -5,22 +5,22 @@ export default {
   theme: {
     extend: {},
     screens: {
-      sm: { max: "420px" },
-      md: { min: "421px" },
+      sm: { max: "26.25rem" }, // 420px
+      md: { min: "26.3125rem" }, // 421px
     },
     fontFamily: {
       Pretendard: ["Pretendard"],
     },
     fontSize: {
-      xxs: "10px",
-      xs: "12px",
-      sm: "14px",
-      base: "16px",
-      lg: "20px",
-      xl: "24px",
-      xxl: "26px",
-      xxxl: "32px",
-      xxxxl: "40px",
+      xxs: "0.625rem",
+      xs: "0.75rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.25rem",
+      xl: "1.5rem",
+      xxl: "1.625rem",
+      xxxl: "2rem",
+      xxxxl: "2.5rem",
     },
     fontWeight: {
       regular: "400",
@@ -35,8 +35,8 @@ export default {
       yellow: "#FFCD12",
       blue: "#4443F6",
       red: "#FF2323",
-      lightblack: "#1C1919",
-      green: "#1DDA18",
+      light_black: "#1C1919",
+      green: "#62EB5E",
       gray_1: "#F3F3F9",
       gray_2: "#D7D7D7",
       gray_3: "#636262",
