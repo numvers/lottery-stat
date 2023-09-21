@@ -5,7 +5,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import "/public/fonts/style.css";
 import Layout from "../components/Layout";
-import { useState } from "react"
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
@@ -16,14 +16,14 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <SessionProvider session={session}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider session={session}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </QueryClientProvider>
   );
 };
 
