@@ -1,13 +1,3 @@
-import Image from "next/image";
-import {
-  calculateTimeRemaining,
-  formatDate,
-  getEraseFourDigits,
-} from "../../module/Util";
-import { useEffect, useState } from "react";
-import LotteryNumberBall from "~/components/LotteryNumberBall";
-import { numToKorean, FormatOptions } from "num-to-korean";
-
 interface LotteryResult {
   round: number;
   date: string;

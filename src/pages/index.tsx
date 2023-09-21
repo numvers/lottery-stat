@@ -1,12 +1,12 @@
 import Image from "next/image";
+import { useState } from "react";
+import LotteryNumberBall from "~/components/LotteryNumberBall";
 import {
   calculateTimeRemaining,
   formatDate,
+  formatMoney,
   getEraseFourDigits,
 } from "../module/Util";
-import { useEffect, useState } from "react";
-import LotteryNumberBall from "~/components/LotteryNumberBall";
-import { numToKorean, FormatOptions } from "num-to-korean";
 
 interface LotteryResult {
   round: number;
@@ -87,12 +87,6 @@ export function RecentLotteryCardComponent({
 }: {
   recentData: LotteryResult;
 }) {
-  const [prize, setPrize] = useState(0);
-  useEffect(() => {
-    if (recentData.wins[0] !== undefined) {
-      setPrize(recentData.wins[0]?.prize);
-    }
-  }, [recentData]);
   return (
     <>
       <div className="relative h-[13.75rem] rounded-[1.25rem] bg-white py-[1.875rem] text-black">
@@ -112,12 +106,11 @@ export function RecentLotteryCardComponent({
           />
         </div>
         <LotteryNumberBall numbers={recentData.numbers} />
-        {numToKorean(prize, FormatOptions.MIXED)}
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#A090FF] text-base leading-[4rem] text-white">
           <span className="font-semibold">1등 총상금</span>
           {recentData.wins[0]?.num_winners}명/
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
-            000억원
+            {formatMoney(recentData.wins[0]?.prize ?? 0)}
           </span>
         </h3>
       </div>
