@@ -44,5 +44,5 @@ export default {
       gray_4: "#242429",
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 } satisfies Config;
