@@ -26,7 +26,7 @@ export default function NavBar() {
     },
   ];
 
-  const [activeTap, setActiveTap] = useState(0);
+  const [activeTap, setActiveTap] = useState(1);
   const clickHandler = (idx: number) => {
     setActiveTap(idx);
   };
