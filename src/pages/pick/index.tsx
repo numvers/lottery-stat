@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Pick() {
   const router = useRouter();
@@ -54,6 +55,7 @@ function NavButton(props: React.ComponentPropsWithoutRef<"button">) {
 
 function NumberBoard() {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
+  const [isExcluding, setIsExcluding] = useState(false);
 
   return (
     <>
@@ -75,7 +77,11 @@ function NumberBoard() {
           style={{ width: "1.25rem", height: "1.25rem" }}
         />
       </div>
-      <div className="my-[1.5rem] h-auto w-full rounded-[1.25rem] bg-gray_1 px-[1.12rem] py-[1.25rem]">
+      <div
+        className={`my-[1.5rem] h-auto w-full rounded-[1.25rem] ${
+          isExcluding ? "bg-gray_4" : "bg-gray_1"
+        } px-[1.12rem] py-[1.25rem]`}
+      >
         <div className=" grid grid-cols-8 items-center gap-x-[0.56rem] gap-y-[0.5rem]">
           {numbers.map((number, _) => (
             <div key={number} className="">
@@ -101,6 +107,7 @@ function NumberBoard() {
           <input
             type="checkbox"
             className="h-[1.125rem] w-[1.125rem] bg-[#D9D9D9]"
+            onChange={(e) => setIsExcluding(e.target.checked)}
           ></input>
           <div className="inline-block text-sm font-medium text-black">
             번호 제외하기
