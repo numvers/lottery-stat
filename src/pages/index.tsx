@@ -109,6 +109,11 @@ export function RecentLotteryCardComponent({
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#A090FF] text-base leading-[4rem] text-white">
           <span className="font-semibold">1등 총상금</span>
           {recentData.wins[0]?.num_winners}명/
+          {formatMoney(
+            recentData.wins[0]?.prize
+              ? recentData.wins[0]?.prize / recentData.wins[0]?.num_winners
+              : 0,
+          )}
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
             {formatMoney(recentData.wins[0]?.prize ?? 0)}
           </span>
@@ -127,23 +132,25 @@ export function RecentLotteryListCardComponent({
   return (
     <>
       <div className="relative h-[13.75rem] rounded-[1.25rem] bg-white p-[1.25rem] text-sm text-black">
-        <div className="grid grid-cols-3 grid-rows-6 ">
-          <ul className="col-span-3 grid grid-cols-3 items-center rounded-[0.375rem]  bg-point/[0.1]  font-bold">
-            <li className="col-span-1">순위</li>
-            <li className="col-span-1">1인당 당첨금액</li>
-            <li className="col-span-1">당첨인원</li>
+        <div className="grid grid-cols-4 grid-rows-6 ">
+          <ul className="col-span-4 grid grid-cols-4 items-center rounded-[0.375rem]  bg-point/[0.1]  font-bold">
+            <li className="col-start-1">순위</li>
+            <li className="col-span-2 col-start-2">1인당 당첨금액</li>
+            <li className="col-start-4">당첨인원</li>
           </ul>
           {allData.slice(0, 5).map((item, idx) => {
             return (
               <ul
                 key={idx}
-                className="col-span-3 mt-[0.625rem] grid grid-cols-3"
+                className="col-span-4 mt-[0.625rem] grid grid-cols-4 py-[0.15rem]"
               >
-                <li className="col-span-1 font-semibold">{idx + 1}</li>
-                <li className="col-span-1 font-regular">
+                <li className="col-start-1 font-semibold">
+                  {idx + 1}
+                </li>
+                <li className="col-span-2 col-start-2 font-regular">
                   {getEraseFourDigits(item.wins[0]?.prize)}원
                 </li>
-                <li className="col-span-1 font-regular">
+                <li className="col-start-4 font-regular">
                   {item.wins[0]?.num_winners}
                 </li>
               </ul>
@@ -164,7 +171,7 @@ export function CommunityCardComponent() {
         로또를 이용하는 전국의 사용자들과 소통해요!
       </span>
       <div className="grid  grid-cols-2 gap-2 text-base text-black">
-        <div className="relative col-span-2 h-[13.75rem] cursor-pointer overflow-hidden rounded-[1.25rem] bg-blue p-[1.25rem] text-white ">
+        <div className="relative col-span-2 h-[10rem] cursor-pointer overflow-hidden rounded-[1.25rem] bg-blue p-[1.25rem] text-white ">
           <h2 className="relative z-10 mb-[0.4375rem] font-semibold">
             1등 당첨이 가장 많이 배출된 곳은?
           </h2>
@@ -181,7 +188,7 @@ export function CommunityCardComponent() {
           <div className="absolute bottom-[5.19rem] right-[1.69rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
           <div className="absolute left-[0.87rem] top-[7.44rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
         </div>
-        <div className="relative h-[13.75rem] cursor-pointer rounded-[1.25rem] bg-gray_2 p-[1.25rem]">
+        <div className="relative h-[12.5rem] cursor-pointer rounded-[1.25rem] bg-gray_2 p-[1.25rem]">
           <h2 className="mb-[0.4375rem] font-semibold">톡톡 로또</h2>
           <span className="text-xs">
             소소한 로또 라이프를

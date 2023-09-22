@@ -24,6 +24,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
   const [items, setItems] = useState(10);
+  // state 없이 구현하는것 고민해보기
   const [data, setData] = useState(allData?.slice(itemIndex, items));
 
   // 로또 조회 핸들러
@@ -162,7 +163,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                 />
               </button>
               {isRoundClick && (
-                <ul className="scrollbar-hide absolute top-[2.4rem] z-20 mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem]">
+                <ul className="absolute top-[2.4rem] z-20 mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem] scrollbar-hide">
                   {allData?.map((item, idx) => {
                     return (
                       <button
@@ -214,7 +215,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               </div>
             );
           })}
-          <div ref={setTarget}>{isLoaded && <h1>Loading..</h1>}</div>
+          <div ref={setTarget} />
           <button
             className="fixed bottom-20 z-50 h-[4.75rem]  w-[4.75rem] rounded-full bg-gray_4 sm:fixed"
             onClick={scrollToTop}
