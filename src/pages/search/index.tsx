@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import useIntersectionObserver from "~/hooks/useIntersectionObserver";
@@ -14,7 +15,11 @@ interface LotteryResult {
   }[];
 }
 
-export default function Home({ allData }: { allData: LotteryResult[] }) {
+export default function Home({ allData }: { allData: LotteryResult[] }) { 
+  const router = useRouter();
+  const handleClick = () => {
+    router.back();
+  };
   // 로또 조회
   const [searchKeyword, setSearchKeyword] = useState("");
   // 회차선택 클릭 상태 state
@@ -103,6 +108,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
             width={10}
             height={20}
             className=" cursor-pointer"
+            onClick={handleClick}
           />
         </div>
         <div className="relative px-[1.25rem]">

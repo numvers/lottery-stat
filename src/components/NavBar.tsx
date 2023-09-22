@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function NavBar() {
+  const router = useRouter();
+
   const navMenu = [
     {
       name: "홈",
@@ -33,9 +36,11 @@ export default function NavBar() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setActiveTap(navMenu.findIndex((menu) => menu.path === window.location.pathname));
+      setActiveTap(
+        navMenu.findIndex((menu) => menu.path === window.location.pathname),
+      );
     }
-  }, []);
+  }, [router]);
 
   return (
     <nav>
