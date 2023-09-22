@@ -43,3 +43,14 @@ export const formatMoney = (money: number) => {
   }
   return `${hundredMillion}억원`;
 };
+
+export const getIncludeParams = (numbers: number[]): string => {
+  // 배열을 정렬합니다.
+  numbers.sort((a, b) => a - b);
+
+  // 배열의 요소를 include 파라미터로 변환합니다.
+  const includeParams = numbers.map((number) => `include=${number}`);
+
+  // 배열의 요소를 연결합니다.
+  return includeParams.join("&");
+};

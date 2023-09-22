@@ -44,7 +44,7 @@ export default function NavBar() {
 
   return (
     <nav>
-      <div className="fixed bottom-0 z-10 h-[4.375rem] rounded-t-[1.25rem] bg-black/[.6] backdrop-blur-[0.625rem] sm:w-screen md:w-[22.5rem]">
+      <div className="fixed bottom-0 z-50 h-[4.375rem] rounded-t-[1.25rem] bg-black/[.6] backdrop-blur-[0.625rem] sm:w-screen md:w-[22.5rem]">
         <ul className="mt-[0.75rem]">
           {navMenu.map((menu, idx) => {
             return (
