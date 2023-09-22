@@ -66,7 +66,7 @@ function NumberBoard() {
         <BlankBall></BlankBall>
         <BlankBall></BlankBall>
         <Image
-          className="mx-10"
+          className="ml-10"
           src="/img/icon_refresh.svg"
           alt="button_refersh"
           width={0}
@@ -74,27 +74,36 @@ function NumberBoard() {
           style={{ width: "1.25rem", height: "1.25rem" }}
         />
       </div>
-      <div className="my-[1.5rem] flex flex-col items-center rounded-[1.25rem] bg-gray_1 px-[1.13rem] py-[1.25rem]">
-        <div>
-          {numbers.map((number, idx) => (
-            <div key={idx} className="float-left">
+      <div className="my-[1.5rem] h-auto w-full rounded-[1.25rem] bg-gray_1 px-[1.12rem] py-[1.25rem]">
+        <div className=" grid grid-cols-8 items-center gap-x-[0.56rem] gap-y-[0.5rem]">
+          {numbers.map((number, _) => (
+            <div key={number} className="">
               <input
                 type="checkbox"
                 value={number}
-                id={String(idx)}
+                id={String(number)}
                 className="hidden"
                 onChange={() => "TODO"}
-                checked={false}
+                checked={true}
               />
               <label
-                htmlFor={String(idx)}
-                className={`inline-block h-[1.875rem] w-[1.875rem] cursor-pointer rounded-full  bg-white 
-            text-center font-semibold leading-[1.875rem] text-black`}
+                htmlFor={String(number)}
+                className={`inline-block h-[2.125rem] w-[2.125rem] cursor-pointer rounded-full  bg-white 
+            text-center font-semibold leading-[2.125rem] text-black `}
               >
                 {number}
               </label>
             </div>
           ))}
+        </div>
+        <div className="mb-[1.62rem] mt-[1.25rem] flex h-[1.125rem] items-center gap-[0.38rem]">
+          <input
+            type="checkbox"
+            className="h-[1.125rem] w-[1.125rem] bg-[#D9D9D9]"
+          ></input>
+          <div className="inline-block text-sm font-medium text-black">
+            번호 제외하기
+          </div>
         </div>
       </div>
     </>
