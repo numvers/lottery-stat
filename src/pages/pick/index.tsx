@@ -58,15 +58,16 @@ function NumberBoard() {
   return (
     <>
       <div className="mb-[0.75rem] text-xl">My lotto</div>
-      <div className="flex h-[2.5rem] items-center gap-[0.63rem]">
-        <BlankBall></BlankBall>
-        <BlankBall></BlankBall>
-        <BlankBall></BlankBall>
-        <BlankBall></BlankBall>
-        <BlankBall></BlankBall>
-        <BlankBall></BlankBall>
+      <div className="flex h-[2.5rem] items-center justify-between">
+        <div className="flex gap-[0.63rem]">
+          <BlankBall></BlankBall>
+          <BlankBall></BlankBall>
+          <BlankBall></BlankBall>
+          <BlankBall></BlankBall>
+          <BlankBall></BlankBall>
+          <BlankBall></BlankBall>
+        </div>
         <Image
-          className="ml-10"
           src="/img/icon_refresh.svg"
           alt="button_refersh"
           width={0}
