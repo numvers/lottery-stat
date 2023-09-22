@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
 
 export default function Pick() {
   const router = useRouter();
+  const [picks, setPicks] = useState<number[]>([]);
+  const [exclusions, setExclusions] = useState<number[]>([]);
   return (
     <main className="px-[1rem] pb-20 sm:w-screen md:w-[22.5rem]">
       <div className="flex h-[3.75rem]">
@@ -39,8 +41,12 @@ export default function Pick() {
           marginRight: "-15px",
         }}
       ></hr>
-
-      <NumberBoard></NumberBoard>
+      <NumberBoard
+        picks={picks}
+        setPicks={setPicks}
+        exclusions={exclusions}
+        setExclusions={setExclusions}
+      ></NumberBoard>
     </main>
   );
 }
@@ -54,7 +60,12 @@ function NavButton(props: React.ComponentPropsWithoutRef<"button">) {
   );
 }
 
-function NumberBoard() {
+const NumberBoard = ({
+  picks,
+  setPicks,
+  exclusions,
+  setExclusions,
+}: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
 
@@ -85,7 +96,23 @@ function NumberBoard() {
       >
         <div className=" grid grid-cols-8 items-center gap-x-[0.56rem] gap-y-[0.5rem]">
           {numbers.map((number, _) => (
-            <NumberBall num={number} key={number}></NumberBall>
+            <NumberBall
+              key={number}
+              number={number}
+              picked={picks.includes(number)}
+              excluded={exclusions.includes(number)}
+              onClick={() => {
+                if (isExcluding) {
+                  setExclusions([number, ...exclusions]);
+                  console.log(
+                    `excluding ${number} for ${exclusions.toString()}`,
+                  );
+                } else {
+                  setPicks([number, ...picks]);
+                  console.log(`picking ${number} for ${picks.toString()}`);
+                }
+              }}
+            ></NumberBall>
           ))}
         </div>
         <div className="mb-[1.62rem] mt-[1.25rem] flex h-[1.125rem] items-center gap-[0.38rem]">
@@ -101,6 +128,13 @@ function NumberBoard() {
       </div>
     </>
   );
+};
+
+interface NumberBoardProps {
+  picks: number[];
+  setPicks: Dispatch<SetStateAction<number[]>>;
+  exclusions: number[];
+  setExclusions: Dispatch<SetStateAction<number[]>>;
 }
 
 function BlankBall() {
@@ -115,17 +149,35 @@ function BlankBall() {
   );
 }
 
-const NumberBall = ({ num }: { num: number }) => {
-  const numColor = getColorClass(num);
+const NumberBall = (props: NumberBallProps) => {
+  let color = "white";
+  if (props.picked) {
+    color = getColorClass(props.number);
+  }
+  if (props.excluded) {
+    color = "black";
+  }
   return (
-    <button className="relative flex items-center justify-center">
-      <div className="absolute z-10 font-semibold text-black">{num}</div>
+    <button
+      className="relative flex items-center justify-center"
+      disabled={props.picked || props.excluded}
+      {...props}
+    >
+      <div className="absolute z-10 font-semibold text-black">
+        {props.number}
+      </div>
       <Image
-        src={`/img/ball_${numColor}.svg`}
-        alt={`${numColor} ${num} ball`}
+        src={`/img/ball_${color}.svg`}
+        alt={`${color} ${props.number} ball`}
         width={32}
         height={32}
       ></Image>
     </button>
   );
 };
+
+interface NumberBallProps extends React.ComponentPropsWithoutRef<"button"> {
+  number: number;
+  picked: boolean;
+  excluded: boolean;
+}
