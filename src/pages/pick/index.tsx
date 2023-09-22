@@ -151,11 +151,13 @@ function BlankBall() {
 
 const NumberBall = (props: NumberBallProps) => {
   let color = "white";
+  let textColor = "black";
   if (props.picked) {
     color = getColorClass(props.number);
   }
   if (props.excluded) {
-    color = "black";
+    color = "gray_4";
+    textColor = "gray_3";
   }
   return (
     <button
@@ -163,7 +165,7 @@ const NumberBall = (props: NumberBallProps) => {
       disabled={props.picked || props.excluded}
       {...props}
     >
-      <div className="absolute z-10 font-semibold text-black">
+      <div className={`absolute z-10 font-semibold text-${textColor}`}>
         {props.number}
       </div>
       <Image
