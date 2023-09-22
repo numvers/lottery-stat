@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { getColorClass } from "../../components/LotteryNumberBall";
 
 export default function Pick() {
   const router = useRouter();
@@ -84,23 +85,7 @@ function NumberBoard() {
       >
         <div className=" grid grid-cols-8 items-center gap-x-[0.56rem] gap-y-[0.5rem]">
           {numbers.map((number, _) => (
-            <div key={number} className="">
-              <input
-                type="checkbox"
-                value={number}
-                id={String(number)}
-                className="hidden"
-                onChange={() => "TODO"}
-                checked={true}
-              />
-              <label
-                htmlFor={String(number)}
-                className={`inline-block h-[2.125rem] w-[2.125rem] cursor-pointer rounded-full  bg-white 
-            text-center font-semibold leading-[2.125rem] text-black `}
-              >
-                {number}
-              </label>
-            </div>
+            <NumberBall num={number} key={number}></NumberBall>
           ))}
         </div>
         <div className="mb-[1.62rem] mt-[1.25rem] flex h-[1.125rem] items-center gap-[0.38rem]">
@@ -129,3 +114,18 @@ function BlankBall() {
     />
   );
 }
+
+const NumberBall = ({ num }: { num: number }) => {
+  const numColor = getColorClass(num);
+  return (
+    <button className="relative flex items-center justify-center">
+      <div className="absolute z-10 font-semibold text-black">{num}</div>
+      <Image
+        src={`/img/ball_${numColor}.svg`}
+        alt={`${numColor} ${num} ball`}
+        width={32}
+        height={32}
+      ></Image>
+    </button>
+  );
+};
