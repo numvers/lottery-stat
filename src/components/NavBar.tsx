@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function NavBar() {
+  const router = useRouter();
+
   const navMenu = [
     {
       name: "홈",
@@ -26,20 +29,22 @@ export default function NavBar() {
     },
   ];
 
-  const [activeTap, setActiveTap] = useState(0);
+  const [activeTap, setActiveTap] = useState(1);
   const clickHandler = (idx: number) => {
     setActiveTap(idx);
   };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setActiveTap(navMenu.findIndex((menu) => menu.path === window.location.pathname));
+      setActiveTap(
+        navMenu.findIndex((menu) => menu.path === window.location.pathname),
+      );
     }
-  }, []);
+  }, [router]);
 
   return (
     <nav>
-      <div className="fixed bottom-0 z-10 h-[4.375rem] rounded-t-[1.25rem] bg-black/[.6] backdrop-blur-[0.625rem] sm:w-screen md:w-[22.5rem]">
+      <div className="fixed bottom-0 z-50 h-[4.375rem] rounded-t-[1.25rem] bg-black/[.6] backdrop-blur-[0.625rem] sm:w-screen md:w-[22.5rem]">
         <ul className="mt-[0.75rem]">
           {navMenu.map((menu, idx) => {
             return (
