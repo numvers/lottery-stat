@@ -23,8 +23,8 @@ export default function NavBar() {
       img: "/img/icon_heart.svg",
     },
     {
-      name: "커뮤니티",
-      path: "/community",
+      name: "번호저장함",
+      path: "/saved",
       img: "/img/icon_message.svg",
     },
   ];

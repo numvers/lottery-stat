@@ -73,7 +73,7 @@ export default function Home() {
                 <>
                   직접 생성 하러가기
                   <Image
-                    src="/img/img_round_plus.svg"
+                    src="/img/img_round_plus_bright.svg"
                     alt="img"
                     width={40}
                     height={40}
