@@ -59,15 +59,15 @@ export default function Pick() {
         className="my-[1.19rem]"
         style={{
           border: "2.5px solid #D1D1D133",
-          marginLeft: "-15",
-          marginRight: "-15px",
+          marginLeft: "-1rem",
+          marginRight: "-1rem",
         }}
       ></hr>
       <NumberBoard
         picks={picks}
         addPick={(num: number) => {
           if (6 <= picks.length) {
-            alert("번호는 6개 이하로 선택 가능합니다.");
+            alert("번호는 6개 모두 선택해주세요.");
           }
           setPicks([num, ...picks]);
         }}
@@ -132,18 +132,18 @@ interface NavButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 function navMessageFrom(menu: menu, numPicked: number) {
   switch (menu) {
     case "pick":
-      return "번호를 직접 선택해보세요!";
+      return "숫자판을 눌러 번호를 선택해보세요!";
     case "uju":
       return "우주 번호가 나옵니다";
     case "random":
       if (0 < numPicked) {
-        return "남은 번호는 랜덤하게 채우세요!";
+        return "나머지 숫자는 랜덤뽑기로 빠르게 추첨해보세요";
       }
-      return "무작위 번호가 나옵니다";
+      return "최대 6개의 숫자를 무작위로 랜덤 추첨해드려요";
     case "missing":
-      return "최근 5회차 중 추첨되지 않았던 번호들 중에 랜덤";
+      return "한달간 추첨되지 않은 숫자를 랜덤 추첨해드려요";
     case "odd-even":
-      return "짝수 3개, 홀수 3개 랜덤 선택";
+      return "짝수 3개, 홀수 3개를 조합하여 추첨해드려요";
   }
 }
 
@@ -254,7 +254,7 @@ const NumberBoard = ({
       <div
         className={`my-[1.5rem] h-auto w-full rounded-[1.25rem] ${
           isExcluding ? "bg-gray_4" : "bg-gray_1"
-        } px-[1.12rem] py-[1.25rem]`}
+        }  px-[1.12rem] py-[1.25rem]`}
       >
         <div className=" grid grid-cols-8 items-center gap-x-[0.56rem] gap-y-[0.5rem]">
           {numbers.map((number, _) => (
@@ -286,7 +286,7 @@ const NumberBoard = ({
             onChange={(e) => setIsExcluding(e.target.checked)}
           ></input>
           <div className="inline-block text-sm font-medium text-black">
-            번호 제외하기
+            제외할 번호 선택하기
           </div>
         </div>
       </div>
