@@ -132,7 +132,7 @@ interface NavButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 function navMessageFrom(menu: menu, numPicked: number) {
   switch (menu) {
     case "pick":
-      return "";
+      return "숫자판을 눌러 번호를 선택해보세요!";
     case "uju":
       return "우주 번호가 나옵니다";
     case "random":
@@ -141,9 +141,9 @@ function navMessageFrom(menu: menu, numPicked: number) {
       }
       return "최대 6개의 숫자를 무작위로 랜덤 추첨해드려요";
     case "missing":
-      return "최근 한달동안(5회차) 당첨번호로 뽑히지 않은 숫자를 랜덤하게 추첨해드려요";
+      return "한달간 추첨되지 않은 숫자를 랜덤 추첨해드려요";
     case "odd-even":
-      return "짝수 3개, 홀수 3개 랜덤 선택";
+      return "짝수 3개, 홀수 3개를 조합하여 추첨해드려요";
   }
 }
 
