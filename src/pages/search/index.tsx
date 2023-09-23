@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import NumberBoard from "~/components/NumberBoard";
 import useIntersectionObserver from "~/hooks/useIntersectionObserver";
-import { formatDate, formatMoney, getEraseFourDigits } from "~/module/Util";
+import {
+  formatDate,
+  formatMoney,
+  getEraseFourDigits,
+  getIncludeParams,
+} from "~/module/Util";
 
 interface LotteryResult {
   round: number;
@@ -123,6 +128,26 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
+            checkNum as number[],
+          )}`,
+        );
+        const result = (await response.json()) as LotteryResult[];
+        setData(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData().catch((error) => {
+      console.error(error);
+    });
+  }, [checkNum]);
+
   return (
     <>
       <main className="pb-20 sm:w-screen  md:w-[22.5rem]">
@@ -197,9 +222,13 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               <>
                 {checkNum.map((item, idx) => {
                   return (
-                    <span
+                    <button
                       key={idx}
+                      value={String(item)}
                       className=" mr-[0.37rem]  inline-block cursor-pointer rounded-[0.63rem] bg-point/[.6] px-[0.62rem] py-[0.38rem] text-sm text-white"
+                      onClick={() =>
+                        setCheckNum(checkNum.filter((num) => num !== item))
+                      }
                     >
                       {item}
                       <Image
@@ -209,7 +238,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                         height={12}
                         className="float-right ml-[0.5rem]"
                       />
-                    </span>
+                    </button>
                   );
                 })}
               </>
