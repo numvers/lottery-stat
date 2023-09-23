@@ -11,6 +11,7 @@ import {
   formatMoney,
   getEraseFourDigits,
   getIncludeParams,
+  getIncludeParamsArray,
 } from "~/module/Util";
 
 interface LotteryResult {
@@ -106,6 +107,21 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
     }
   };
 
+  // 번호 검색으로 로또 정보 얻기 핸들러
+  const getDetailData = async () => {
+    try {
+      const response = await fetch(
+        `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParamsArray(
+          searchKeyword,
+        )}`,
+      );
+      const result = (await response.json()) as LotteryResult[];
+      setData(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // Infinite scroll
   const testFetch = (delay = 0) => new Promise((res) => setTimeout(res, delay));
 
@@ -151,6 +167,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   }, []);
 
   useEffect(() => {
+    // 번호 검색으로 로또 정보 얻기 핸들러
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -199,11 +216,12 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               onChange={searchHandler}
             />
             <Image
-              src="/img/icon_seach_trans.svg"
+              src={`${searchKeyword.length > 0 ? '/img/icon_search.svg' : '/img/icon_search_trans.svg'}`}
               alt="img"
               width={20}
               height={20}
               className="absolute right-5 top-5 cursor-pointer"
+              onClick={getDetailData}
             />
             <div className="mb-4 flex items-center justify-between text-sm">
               <button
