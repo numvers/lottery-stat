@@ -142,9 +142,11 @@ function navMessageFrom(menu: menu, numPicked: number) {
 }
 
 function numbersFrom(menu: menu, exclusions: number[]) {
-  const numLeft = Array.from(Array(45), (_, i) => i + 1).filter(
-    (n) => !exclusions.includes(n),
-  );
+  const numLeftRandom = Array.from(Array(45), (_, i) => i + 1)
+    .filter((n) => !exclusions.includes(n))
+    .map((value) => ({ num: value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ num }) => num);
 
   const missing = [
     2, 6, 10, 11, 19, 20, 25, 28, 30, 35, 37, 39, 40, 41, 43, 45,
@@ -153,18 +155,11 @@ function numbersFrom(menu: menu, exclusions: number[]) {
   switch (menu) {
     case "odd-even":
     case "missing":
-      return missing
-        .filter((n) => !exclusions.includes(n))
-        .map((value) => ({ num: value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ num }) => num);
+      return numLeftRandom.filter((n) => missing.includes(n));
     case "pick":
     case "uju":
     case "random":
-      return numLeft
-        .map((value) => ({ num: value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ num }) => num);
+      return numLeftRandom;
   }
 }
 
