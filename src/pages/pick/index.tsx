@@ -225,7 +225,16 @@ const NumberBoard = ({
 
   return (
     <>
-      <div className="mb-[0.75rem] text-xl">My lotto</div>
+      <div className="mb-[0.75rem] flex h-[1.4375rem] gap-[0.62rem] text-xl">
+        <div className="text-md text-point">My lotto</div>
+        {0 < picks.length && (
+          <div className="inline-flex items-center justify-center gap-2.5 rounded-[1.625rem] bg-point px-[0.5rem] py-[0.13rem]">
+            <div className="font-normal text-center font-['Pretendard'] text-xs">
+              선택한 번호를 다시 눌러서 제거할 수 있어요!
+            </div>
+          </div>
+        )}
+      </div>
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
           {Array.from(Array(6), (_, i) => i).map((i) => {
