@@ -303,7 +303,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                       {formatDate(item.date)} 추첨
                     </span>
                   </h1>
-                  <LotteryNumberBall numbers={item.numbers} bonus={isBonus} />
+                  <LotteryNumberBall numbers={item.numbers} bonus={isBonus} checkNum={checkNum} />
                   <div className="mt-[1.06rem] rounded-[0.63rem] bg-gray_1 py-3 text-center">
                     1등 총상금({item.wins[0]?.num_winners}명/
                     {formatMoney(
