@@ -90,15 +90,19 @@ export default function Pick() {
               alert("6개가 전부 채워지면 저장가능합니다.");
               return;
             }
-            setPicks(
-              [
-                ...picks,
-                ...numbersFrom(menu, [...picks, ...exclusions]).slice(
-                  0,
-                  6 - picks.length,
-                ),
-              ].sort(),
-            );
+            if (picks.length < 6) {
+              setPicks(
+                [
+                  ...picks,
+                  ...numbersFrom(menu, [...picks, ...exclusions]).slice(
+                    0,
+                    6 - picks.length,
+                  ),
+                ].sort(),
+              );
+              return;
+            }
+            alert("TODO: 번호 저장 페이지로 이동");
           }}
         ></SubmitButton>
       )}
