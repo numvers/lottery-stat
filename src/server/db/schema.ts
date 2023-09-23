@@ -30,3 +30,16 @@ export const lotteryStatLotteries = mysqlTable(
     };
   },
 );
+
+export const nicknames = mysqlTable(
+  "nicknames",
+  {
+    id: int("id").notNull().autoincrement(),
+    name: text("name").notNull(),
+  },
+  (table) => {
+    return {
+      id: primaryKey(table.id),
+    };
+  },
+);
