@@ -96,6 +96,11 @@ export default function Pick() {
               alert("번호 6개 모두 선택해주세요");
               return;
             }
+            if (menu == "uju") {
+              // TODO
+              // router.push("이미지 저장 페이지")
+              alert("TODO: 이미지 저장 페이지로 이동");
+            }
             if (picks.length < 6) {
               setPicks([
                 ...picks,
