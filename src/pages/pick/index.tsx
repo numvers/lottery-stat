@@ -75,7 +75,7 @@ const NumberBoard = ({
 }: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
-  const sortedPicks = picks.toSorted();
+  const sortedPicks = [...picks].sort();
 
   return (
     <>
