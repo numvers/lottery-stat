@@ -68,18 +68,26 @@ const NumberBoard = ({
 }: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
+  const sortedPicks = picks.toSorted();
 
   return (
     <>
       <div className="mb-[0.75rem] text-xl">My lotto</div>
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
-          <BlankBall></BlankBall>
-          <BlankBall></BlankBall>
-          <BlankBall></BlankBall>
-          <BlankBall></BlankBall>
-          <BlankBall></BlankBall>
-          <BlankBall></BlankBall>
+          {Array.from(Array(6), (_, i) => i).map((i) => {
+            if (i < sortedPicks.length) {
+              return (
+                <NumberBall
+                  key={i}
+                  number={sortedPicks[i] ?? 0}
+                  excluded={false}
+                  picked={true}
+                ></NumberBall>
+              );
+            }
+            return <BlankBall key={i}></BlankBall>;
+          })}
         </div>
         <Image
           src="/img/icon_refresh.svg"
