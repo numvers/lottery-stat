@@ -91,15 +91,13 @@ export default function Pick() {
               return;
             }
             if (picks.length < 6) {
-              setPicks(
-                [
-                  ...picks,
-                  ...numbersFrom(menu, [...picks, ...exclusions]).slice(
-                    0,
-                    6 - picks.length,
-                  ),
-                ].sort(),
-              );
+              setPicks([
+                ...picks,
+                ...numbersFrom(menu, [...picks, ...exclusions]).slice(
+                  0,
+                  6 - picks.length,
+                ),
+              ]);
               return;
             }
             alert("TODO: 번호 저장 페이지로 이동");
@@ -144,11 +142,21 @@ function navMessageFrom(menu: menu, numPicked: number) {
 }
 
 function numbersFrom(menu: menu, exclusions: number[]) {
-  return Array.from(Array(45), (_, i) => i + 1)
-    .filter((n) => !exclusions.includes(n))
-    .map((value) => ({ num: value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ num }) => num);
+  const numLeft = Array.from(Array(45), (_, i) => i + 1).filter(
+    (n) => !exclusions.includes(n),
+  );
+
+  switch (menu) {
+    case "odd-even":
+    case "pick":
+    case "uju":
+    case "missing":
+    case "random":
+      return numLeft
+        .map((value) => ({ num: value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ num }) => num);
+  }
 }
 
 function SubmitButton(props: SubmitButtonProps) {
@@ -198,7 +206,7 @@ const NumberBoard = ({
 }: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
-  const sortedPicks = [...picks].sort();
+  const sortedPicks = [...picks].sort((left, right) => left - right);
 
   return (
     <>
@@ -206,6 +214,7 @@ const NumberBoard = ({
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
           {Array.from(Array(6), (_, i) => i).map((i) => {
+            console.log(sortedPicks);
             if (i < sortedPicks.length) {
               return (
                 <NumberBall
@@ -216,8 +225,9 @@ const NumberBoard = ({
                   onClick={() => removePicks(sortedPicks[i] ?? 0)}
                 ></NumberBall>
               );
+            } else {
+              return <BlankBall key={i}></BlankBall>;
             }
-            return <BlankBall key={i}></BlankBall>;
           })}
         </div>
         <Image
