@@ -39,6 +39,10 @@ export default function NavBar() {
       setActiveTap(
         navMenu.findIndex((menu) => menu.path === window.location.pathname),
       );
+
+      if (window.location.pathname === "/select/list") {
+        setActiveTap(2);
+      }
     }
   }, [router]);
 

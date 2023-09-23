@@ -1,0 +1,49 @@
+<svg width="186" height="50" viewBox="0 0 186 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="186" height="50" rx="11.4024" fill="white" fill-opacity="0.5"/>
+<rect x="12" y="13.9998" width="22" height="22" rx="11" fill="url(#paint0_linear_1_3)"/>
+<path d="M21.8672 21.929V28.9993H20.5879V23.1692H20.5488L18.8984 24.2239V23.0618L20.6465 21.929H21.8672ZM26.457 21.929V28.9993H25.1777V23.1692H25.1387L23.4883 24.2239V23.0618L25.2363 21.929H26.457Z" fill="black"/>
+<rect x="40" y="13.9998" width="22" height="22" rx="11" fill="url(#paint1_linear_1_3)"/>
+<path d="M49.8672 21.929V28.9993H48.5879V23.1692H48.5488L46.8984 24.2239V23.0618L48.6465 21.929H49.8672ZM54.457 21.929V28.9993H53.1777V23.1692H53.1387L51.4883 24.2239V23.0618L53.2363 21.929H54.457Z" fill="black"/>
+<rect x="68" y="14.0002" width="22" height="22" rx="11" fill="white"/>
+<mask id="mask0_1_3" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="74" y="19" width="10" height="11">
+<rect x="74" y="19.9998" width="10" height="10" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_3)">
+<path d="M79 21.9998L79 27.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+<path d="M76 24.9998L82 24.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+</g>
+<rect x="96" y="14.0002" width="22" height="22" rx="11" fill="white"/>
+<mask id="mask1_1_3" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="102" y="19" width="10" height="11">
+<rect x="102" y="19.9998" width="10" height="10" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask1_1_3)">
+<path d="M107 21.9998L107 27.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+<path d="M104 24.9998L110 24.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+</g>
+<rect x="124" y="14.0002" width="22" height="22" rx="11" fill="white"/>
+<mask id="mask2_1_3" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="130" y="19" width="10" height="11">
+<rect x="130" y="19.9998" width="10" height="10" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask2_1_3)">
+<path d="M135 21.9998L135 27.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+<path d="M132 24.9998L138 24.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+</g>
+<rect x="152" y="14.0002" width="22" height="22" rx="11" fill="white"/>
+<mask id="mask3_1_3" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="158" y="19" width="10" height="11">
+<rect x="158" y="19.9998" width="10" height="10" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask3_1_3)">
+<path d="M163 21.9998L163 27.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+<path d="M160 24.9998L166 24.9998" stroke="#4B2EFD" stroke-linecap="round"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1_3" x1="16.8125" y1="16.7498" x2="29.875" y2="33.9373" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5F88F1"/>
+<stop offset="0.780676" stop-color="#9BB2FB"/>
+</linearGradient>
+<linearGradient id="paint1_linear_1_3" x1="44.8125" y1="16.7498" x2="57.875" y2="33.9373" gradientUnits="userSpaceOnUse">
+<stop stop-color="#3CE038"/>
+<stop offset="0.775468" stop-color="#9BFA98"/>
+</linearGradient>
+</defs>
+</svg>

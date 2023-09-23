@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getIncludeParams } from "~/module/Util";
 
 interface LotteryResult {
@@ -12,21 +12,19 @@ interface LotteryResult {
 }
 
 export default function NumberBoard({
+  checkNum,
+  setCheckNum,
   setData,
   setIsMultiCheck,
 }: {
-  setData: (newData: LotteryResult[]) => void;
+  checkNum: (number | boolean)[];
+  setCheckNum: React.Dispatch<React.SetStateAction<(number | boolean)[]>>;
+  setData: React.Dispatch<React.SetStateAction<LotteryResult[]>>;
   setIsMultiCheck: (isMultiCheck: boolean) => void;
 }) {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
 
-  const [checkNum, setCheckNum] = useState<number[]>([]);
-
   // 숫자 핸들러
-  const checkNumHandler = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    arrayListItemHandler(Number(target.value), target.checked);
-  };
-
   const arrayListItemHandler = (code: number, isChecked: boolean) => {
     if (isChecked) {
       if (checkNum.length > 6) {
@@ -53,14 +51,14 @@ export default function NumberBoard({
       alert("번호를 선택해주세요.");
       return;
     } else {
-      setData([]);
       const response = await fetch(
         `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
-          checkNum,
+          checkNum as number[],
         )}`,
       );
       const result = (await response.json()) as LotteryResult[];
       setData(result);
+      console.log(result)
       setIsMultiCheck(false);
     }
   };
@@ -83,7 +81,9 @@ export default function NumberBoard({
               value={number}
               id={String(idx)}
               className="hidden"
-              onChange={checkNumHandler}
+              onChange={({ target }) => {
+                arrayListItemHandler(Number(target.value), target.checked);
+              }}
               checked={checkNum.includes(number)}
             />
             <label

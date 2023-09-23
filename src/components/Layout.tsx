@@ -9,7 +9,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <>
-      <Seo title="우주로또" />
+      <Seo title="우주로또 - 우주가 선택한 이번주의 주인공은 바로 나!" />
       <div className=" m-auto min-h-screen sm:w-screen md:w-[22.5rem] bg-black text-white">
         <div>{children}</div>
         <NavBar />
