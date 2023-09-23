@@ -59,8 +59,8 @@ export default function Pick() {
         className="my-[1.19rem]"
         style={{
           border: "2.5px solid #D1D1D133",
-          marginLeft: "-15",
-          marginRight: "-15px",
+          marginLeft: "-1rem",
+          marginRight: "-1rem",
         }}
       ></hr>
       <NumberBoard
@@ -254,7 +254,7 @@ const NumberBoard = ({
       <div
         className={`my-[1.5rem] h-auto w-full rounded-[1.25rem] ${
           isExcluding ? "bg-gray_4" : "bg-gray_1"
-        } px-[1.12rem] py-[1.25rem]`}
+        }  px-[1.12rem] py-[1.25rem]`}
       >
         <div className=" grid grid-cols-8 items-center gap-x-[0.56rem] gap-y-[0.5rem]">
           {numbers.map((number, _) => (
