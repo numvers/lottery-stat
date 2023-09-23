@@ -91,10 +91,9 @@ export default function Pick() {
         <SubmitButton
           menu={menu}
           numPicks={picks.length}
-          disabled={menu == "pick" && picks.length < 6}
           onClick={() => {
             if (menu == "pick" && picks.length < 6) {
-              alert("6개가 전부 채워지면 저장가능합니다.");
+              alert("번호 6개 모두 선택해주세요");
               return;
             }
             if (picks.length < 6) {
@@ -175,11 +174,10 @@ function numbersFrom(menu: menu, exclusions: number[]) {
 }
 
 function SubmitButton(props: SubmitButtonProps) {
-  const disabled = props.disabled;
   return (
     <button
       className={`bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] ${
-        disabled ? "bg-gray_4" : "bg-point"
+        props.numPicks < 6 ? "bg-gray_4" : "bg-point"
       } text-center`}
       {...props}
     >
