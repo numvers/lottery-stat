@@ -167,7 +167,7 @@ function navMessageFrom(menu: menu, numPicked: number) {
   }
 }
 
-function numbersFrom(menu: menu, exclusions: number[]) {
+export function numbersFrom(menu: menu, exclusions: number[]) {
   const numLeftRandom = Array.from(Array(45), (_, i) => i + 1)
     .filter((n) => !exclusions.includes(n))
     .map((value) => ({ num: value, sort: Math.random() }))
@@ -195,6 +195,11 @@ function numbersFrom(menu: menu, exclusions: number[]) {
       return numLeftRandom.filter((n) => missing.includes(n));
     case "pick":
     case "uju":
+      const recent = [
+        3, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 25, 26, 27, 29,
+        31, 32, 33, 34, 35, 36, 37, 38, 42, 44,
+      ];
+      return numLeftRandom.filter((v) => recent.includes(v));
     case "random":
       return numLeftRandom;
   }
