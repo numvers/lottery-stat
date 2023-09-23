@@ -81,7 +81,26 @@ export default function Pick() {
         }}
       ></NumberBoard>
       {(0 < picks.length || menu != "pick") && (
-        <SubmitButton menu={menu} numPicks={picks.length}></SubmitButton>
+        <SubmitButton
+          menu={menu}
+          numPicks={picks.length}
+          disabled={menu == "pick" && picks.length < 6}
+          onClick={() => {
+            if (menu == "pick" && picks.length < 6) {
+              alert("6개가 전부 채워지면 저장가능합니다.");
+              return;
+            }
+            setPicks(
+              [
+                ...picks,
+                ...numbersFrom(menu, [...picks, ...exclusions]).slice(
+                  0,
+                  6 - picks.length,
+                ),
+              ].sort(),
+            );
+          }}
+        ></SubmitButton>
       )}
     </main>
   );
@@ -123,25 +142,18 @@ function navMessageFrom(menu: menu, numPicked: number) {
 function numbersFrom(menu: menu, exclusions: number[]) {
   return Array.from(Array(45), (_, i) => i + 1)
     .filter((n) => !exclusions.includes(n))
-    .map((n) => ({ n, sort: Math.random() }))
+    .map((value) => ({ num: value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
-    .map((n) => n);
+    .map(({ num }) => num);
 }
 
 function SubmitButton(props: SubmitButtonProps) {
-  const disabled = props.menu == "pick" && props.numPicks < 6;
+  const disabled = props.disabled;
   return (
     <button
       className={`bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] ${
         disabled ? "bg-gray_4" : "bg-point"
       } text-center`}
-      onClick={() => {
-        if (disabled) {
-          alert("6개가 전부 채워지면 저장가능합니다.");
-        } else {
-          alert("TODO: 저장 페이지로 이동");
-        }
-      }}
       {...props}
     >
       <p>{submitMessageFrom(props.menu, props.numPicks)}</p>
