@@ -25,14 +25,16 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   const [isRoundClick, setIsRoundClick] = useState(false);
   // 스크롤 상태 state
   const [isScroll, setIsScroll] = useState(false);
-  // 다중선택 클릭 상태 state
+  // 번호선택 클릭 상태 state
   const [isMultiCheck, setIsMultiCheck] = useState(false);
-
+  // 보너스 번호 제외 상태 state
+  const [isBonus, setIsBonus] = useState(false);
+  // 번호 선택 후 받는 배열값
+  const [data, setData] = useState<LotteryResult[]>([]);
+  const [checkNum, setCheckNum] = useState<(number | boolean)[]>([]);
   // Infinite scroll
   const [isLoaded, setIsLoaded] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
-  // const [items, setItems] = useState(10);
-  // const [data, setData] = useState(allData?.slice(itemIndex, items));
 
   // top 버튼(페이지 상단으로 이동)
   const scrollToTop = () => {
@@ -62,22 +64,13 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   };
 
   // 회차선택 핸들러
-  const roundHandler = async (e: React.MouseEvent<HTMLElement>) => {
+  const roundHandler = (e: React.MouseEvent<HTMLElement>) => {
     const value = (e.target as HTMLButtonElement).value;
-
-    const response = await fetch(
-      `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries/${value}`,
-    );
-    const result = (await response.json()) as LotteryResult;
-
-    // setItemIndex()
-
-    // const newData = [result, ...data];
-    // setData(newData);
+    setItemIndex(allData.length - Number(value));
     setIsRoundClick(false);
   };
 
-  // 다중선택 핸들러
+  // 번호선택 핸들러
   const multiCheckHandler = () => {
     if (isMultiCheck) {
       setIsMultiCheck(false);
@@ -93,8 +86,6 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
     setIsLoaded(true);
     await testFetch();
     setItemIndex(itemIndex + 10);
-    // setItems(items + 10);
-    // setData([...data, ...allData?.slice(items, items + 10)]);
     setIsLoaded(false);
   };
 
@@ -120,15 +111,14 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // 스크롤 감지
   useEffect(() => {
     const onScroll = () => {
-      if (win.scrollY > 10) {
+      if (window.scrollY > 10) {
         setIsScroll(true);
       } else {
         setIsScroll(false);
       }
     };
 
-    const win: Window = window;
-    win.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll);
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -163,7 +153,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               height={20}
               className="absolute right-5 top-6 cursor-pointer"
             />
-            <div className="flex items-center justify-between text-sm">
+            <div className="mb-4 flex items-center justify-between text-sm">
               <button
                 className={`rounded-[1.25rem]  py-3 pl-5 pr-4 ${
                   isMultiCheck ? "bg-point" : "bg-gray_4"
@@ -183,20 +173,46 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                 <input
                   type="checkbox"
                   id="bonus_num_check"
-                  className="mr-2 h-[1.125rem] w-[1.125rem] accent-point"
+                  className="mr-2 h-[1.125rem] w-[1.125rem] cursor-pointer accent-point"
+                  onChange={() =>
+                    isBonus ? setIsBonus(false) : setIsBonus(true)
+                  }
                 />
-                <label htmlFor="bonus_num_check" className="">
+                <label htmlFor="bonus_num_check" className="cursor-pointer">
                   보너스 번호 제외
                 </label>
               </div>
             </div>
             {isMultiCheck && (
               <div className="absolute z-40 mt-[0.63rem] ">
-                {/* <NumberBoard
-                  // setData={setData}
+                <NumberBoard
+                  checkNum={checkNum}
+                  setCheckNum={setCheckNum}
+                  setData={setData}
                   setIsMultiCheck={setIsMultiCheck}
-                /> */}
+                />
               </div>
+            )}
+            {checkNum.length > 0 && (
+              <>
+                {checkNum.map((item, idx) => {
+                  return (
+                    <span
+                      key={idx}
+                      className=" mr-[0.37rem]  inline-block cursor-pointer rounded-[0.63rem] bg-point/[.6] px-[0.62rem] py-[0.38rem] text-sm text-white"
+                    >
+                      {item}
+                      <Image
+                        src="/img/icon_clear_white.svg"
+                        alt="img"
+                        width={12}
+                        height={12}
+                        className="float-right ml-[0.5rem]"
+                      />
+                    </span>
+                  );
+                })}
+              </>
             )}
           </div>
           {/* 회차 */}
@@ -234,8 +250,8 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               )}
             </div>
           </div>
-          {allData
-            ?.filter((_, index) => index >= itemIndex)
+          {(data.length === 0 ? allData : data)
+            .filter((_, index) => index >= itemIndex)
             .map((item, idx) => {
               return (
                 <div
@@ -258,7 +274,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                       {formatDate(item.date)} 추첨
                     </span>
                   </h1>
-                  <LotteryNumberBall numbers={item.numbers} bonus={true} />
+                  <LotteryNumberBall numbers={item.numbers} bonus={isBonus} />
                   <div className="mt-[1.06rem] rounded-[0.63rem] bg-gray_1 py-3 text-center">
                     1등 총상금({item.wins[0]?.num_winners}명/
                     {formatMoney(
@@ -277,8 +293,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
           <div ref={setTarget} />
           {isScroll && (
             <button
-              className=" sticky bottom-20 z-50 float-right
-             h-[4.75rem] w-[4.75rem] font-semibold rounded-full bg-gray_4 shadow-[0_4px_10px_0_rgba(0,0,0,0.25)]"
+              className="sticky bottom-20 z-50 float-right h-[4.75rem] w-[4.75rem] rounded-full bg-gray_4 font-semibold shadow-[0_4px_10px_0_rgba(0,0,0,0.25)]"
               onClick={scrollToTop}
             >
               <Image

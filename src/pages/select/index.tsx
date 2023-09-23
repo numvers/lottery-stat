@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter();
+  // 검색 정규화 번호-번호-번호- 이렇게 그냥 집어넣기 10-200-30-40 이여도 상관없음
   const active =
     "gradient-container flex h-[3.75rem] w-[65%] items-center justify-between rounded-full pl-[1.2rem] pr-[0.63rem] text-center text-md font-semibold";
   const disabled =
@@ -111,7 +112,7 @@ export default function Home() {
               </div>
               <LotteryNumberBallSmall
                 numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={false}
+                bonus={true}
               />
             </div>
           </div>
@@ -123,7 +124,7 @@ export default function Home() {
               </div>
               <LotteryNumberBallSmall
                 numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={false}
+                bonus={true}
               />
             </div>
           </div>

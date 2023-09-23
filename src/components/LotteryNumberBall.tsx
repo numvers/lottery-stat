@@ -37,7 +37,7 @@ export default function LotteryNumberBall({
   return (
     <div className="flex justify-center">
       {numbers.slice(0, 6).map((item, idx) => renderNumberBall(item, idx))}
-      {bonus && (
+      {!bonus && (
         <>
           <Image src="/img/icon_plus.svg" alt="img" width={12} height={12} />
           {numbers.slice(6, 7).map((item, idx) => renderNumberBall(item, idx))}

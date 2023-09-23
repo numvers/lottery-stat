@@ -59,7 +59,7 @@ export default function List() {
               </div>
               <LotteryNumberBallSmall
                 numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={false}
+                bonus={true}
               />
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function List() {
               </div>
               <LotteryNumberBallSmall
                 numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={false}
+                bonus={true}
               />
             </div>
           </div>
