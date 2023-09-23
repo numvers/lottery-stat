@@ -44,8 +44,8 @@ export default function Pick() {
       <NumberBoard
         picks={picks}
         addPicks={(num: number) => {
-          if (7 <= picks.length) {
-            alert("번호는 7개 이하로 선택 가능합니다.");
+          if (6 <= picks.length) {
+            alert("번호는 6개 이하로 선택 가능합니다.");
           }
           setPicks([num, ...picks]);
         }}
@@ -82,7 +82,7 @@ const NumberBoard = ({
       <div className="mb-[0.75rem] text-xl">My lotto</div>
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
-          {Array.from(Array(7), (_, i) => i).map((i) => {
+          {Array.from(Array(6), (_, i) => i).map((i) => {
             if (i < sortedPicks.length) {
               return (
                 <NumberBall
