@@ -107,6 +107,7 @@ export default function Pick() {
               return;
             }
             mutation.mutate({
+              nickname: "뛰어난 기사", // TODO: 닉네임 생성
               type: menu,
               numbers: picks,
             });

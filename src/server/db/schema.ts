@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   int,
   mysqlTableCreator,
@@ -15,7 +16,7 @@ export const lotteryStatLotteries = mysqlTable(
     id: int("id").notNull().autoincrement(),
     createdAt: timestamp("created_at", { mode: "string" })
       .notNull()
-      .defaultNow(),
+      .default(sql`CURRENT_TIMESTAMP`),
     type: text("type").notNull(),
     first: tinyint("first").notNull(),
     second: tinyint("second").notNull(),
@@ -23,6 +24,7 @@ export const lotteryStatLotteries = mysqlTable(
     forth: tinyint("forth").notNull(),
     fifth: tinyint("fifth").notNull(),
     sixth: tinyint("sixth").notNull(),
+    nickname: text("nickname").notNull(),
   },
   (table) => {
     return {
