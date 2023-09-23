@@ -172,11 +172,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               onChange={searchHandler}
             />
             <Image
-              src="/img/icon_search.svg"
+              src="/img/icon_seach_trans.svg"
               alt="img"
               width={20}
               height={20}
-              className="absolute right-5 top-6 cursor-pointer"
+              className="absolute right-5 top-5 cursor-pointer"
             />
             <div className="mb-4 flex items-center justify-between text-sm">
               <button

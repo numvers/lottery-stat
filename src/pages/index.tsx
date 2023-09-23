@@ -105,7 +105,7 @@ export function RecentLotteryCardComponent({
             className="ml-[1rem] cursor-pointer"
           />
         </div>
-        <LotteryNumberBall numbers={recentData.numbers} bonus={true}/>
+        <LotteryNumberBall numbers={recentData.numbers} bonus={true} checkNum={[]}/>
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] text-base leading-[4rem] text-white">
           <span className="font-semibold">1등 총상금</span>
           {recentData.wins[0]?.num_winners}명/
