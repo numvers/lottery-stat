@@ -2,11 +2,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
+import { api } from "../../utils/api";
 
 type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
 
 export default function Pick() {
   const router = useRouter();
+  const mutation = api.lottery.createLottery.useMutation();
   const [menu, setMenu] = useState<menu>("pick");
   const [picks, setPicks] = useState<number[]>([]);
   const [exclusions, setExclusions] = useState<number[]>([]);
@@ -100,7 +102,11 @@ export default function Pick() {
               ]);
               return;
             }
-            alert("TODO: 번호 저장 페이지로 이동");
+            mutation.mutate({
+              type: menu,
+              numbers: picks,
+            });
+            alert("번호 저장 완료!");
           }}
         ></SubmitButton>
       )}
