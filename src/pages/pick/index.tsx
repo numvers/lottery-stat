@@ -63,25 +63,30 @@ export default function Pick() {
           marginRight: "-1rem",
         }}
       ></hr>
-      <NumberBoard
-        picks={picks}
-        addPick={(num: number) => {
-          if (6 <= picks.length) {
-            alert("번호는 6개 모두 선택해주세요.");
-          }
-          setPicks([num, ...picks]);
-        }}
-        removePicks={(...numToRemove: number[]) => {
-          setPicks(picks.filter((n) => !numToRemove.includes(n)));
-        }}
-        exclusions={exclusions}
-        addExclusion={(num: number) => {
-          setExclusions([num, ...exclusions]);
-        }}
-        removeExclusion={(num: number) => {
-          setExclusions(exclusions.filter((n) => n != num));
-        }}
-      ></NumberBoard>
+      {menu == "uju" ? (
+        <SpaceBoard></SpaceBoard>
+      ) : (
+        <NumberBoard
+          picks={picks}
+          addPick={(num: number) => {
+            if (6 <= picks.length) {
+              alert("번호는 6개 모두 선택해주세요.");
+            }
+            setPicks([num, ...picks]);
+          }}
+          removePicks={(...numToRemove: number[]) => {
+            setPicks(picks.filter((n) => !numToRemove.includes(n)));
+          }}
+          exclusions={exclusions}
+          addExclusion={(num: number) => {
+            setExclusions([num, ...exclusions]);
+          }}
+          removeExclusion={(num: number) => {
+            setExclusions(exclusions.filter((n) => n != num));
+          }}
+        ></NumberBoard>
+      )}
+
       {(0 < picks.length || menu != "pick") && (
         <SubmitButton
           menu={menu}
@@ -196,7 +201,7 @@ function submitMessageFrom(menu: menu, numPicks: number) {
     case "pick":
       return `선택완료 ${numPicks}/6`;
     case "uju":
-      return `우주 픽`;
+      return "시작하기";
     case "random":
       return `랜덤 뽑기`;
     case "missing":
@@ -294,6 +299,23 @@ const NumberBoard = ({
   );
 };
 
+function SpaceBoard() {
+  return (
+    <div className="mb-[6.63rem]">
+      <Image
+        src="/img/space.svg"
+        alt="button_blue_plus"
+        width={0}
+        height={0}
+        style={{ width: "20.5rem", height: "18.75rem" }}
+      />
+      <p className="mt-[0.62rem] h-[4.375rem] rounded-[1.25rem] bg-gray_4 px-[1.06rem] py-[1.06rem] text-center text-sm text-gray_2">
+        과거의 로또 추첨 결과와 패턴을 분석한 방식으로,<br></br>각 번호의 출현
+        빈도를 파악하여 번호를 추첨 해드려요
+      </p>
+    </div>
+  );
+}
 interface NumberBoardProps {
   picks: number[];
   addPick: (num: number) => void;
