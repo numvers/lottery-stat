@@ -14,6 +14,7 @@ export default function Layout({ children }: LayoutProps) {
         <div>{children}</div>
         <NavBar />
       </div>
+      <div id="portal"></div>
     </>
   );
 }

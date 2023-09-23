@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { getIncludeParams } from "~/module/Util";
 
 interface LotteryResult {
@@ -58,14 +57,9 @@ export default function NumberBoard({
       );
       const result = (await response.json()) as LotteryResult[];
       setData(result);
-      console.log(result)
       setIsMultiCheck(false);
     }
   };
-
-  useEffect(() => {
-    console.log(checkNum);
-  }, [checkNum]);
 
   return (
     <div className="flex flex-col items-center rounded-[1.25rem] bg-gray_1 p-[1.25rem]">

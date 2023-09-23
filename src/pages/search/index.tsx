@@ -1,10 +1,18 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
+import LotteryDetailModal from "~/components/LotteryDetailModal";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import NumberBoard from "~/components/NumberBoard";
 import useIntersectionObserver from "~/hooks/useIntersectionObserver";
-import { formatDate, formatMoney, getEraseFourDigits } from "~/module/Util";
+import {
+  formatDate,
+  formatMoney,
+  getEraseFourDigits,
+  getIncludeParams,
+  getIncludeParamsArray,
+} from "~/module/Util";
 
 interface LotteryResult {
   round: number;
@@ -35,6 +43,10 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // Infinite scroll
   const [isLoaded, setIsLoaded] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
+  // 상세정보 모달창
+  const [isDetailModal, setIsDetailModal] = useState(false);
+  const [portalElement, setPortalElement] = useState<Element | null>(null);
+  const [lottoDetailList, setLottoDetailList] = useState<LotteryResult[]>([]);
 
   // top 버튼(페이지 상단으로 이동)
   const scrollToTop = () => {
@@ -47,6 +59,22 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // 뒤로가기
   const handleClick = () => {
     router.back();
+  };
+
+  // 로또번호 상세 모달창 열기
+  const openLottoDetailModal = (event: React.MouseEvent<HTMLElement>) => {
+    const value = Number((event.target as HTMLButtonElement).value);
+
+    // allData와 data를 합친 새로운 배열을 생성
+    const combinedData = allData.length > 0 ? [...allData] : [...data];
+
+    // value 위치의 데이터를 가져와서 배열 형태로 설정
+    const selectedData = combinedData[value];
+
+    if (selectedData) {
+      setLottoDetailList([selectedData]); // 배열 형태로 설정
+      setIsDetailModal(true);
+    }
   };
 
   // 로또 조회 핸들러
@@ -76,6 +104,21 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
       setIsMultiCheck(false);
     } else {
       setIsMultiCheck(true);
+    }
+  };
+
+  // 번호 검색으로 로또 정보 얻기 핸들러
+  const getDetailData = async () => {
+    try {
+      const response = await fetch(
+        `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParamsArray(
+          searchKeyword,
+        )}`,
+      );
+      const result = (await response.json()) as LotteryResult[];
+      setData(result);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -123,6 +166,32 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    // 번호 검색으로 로또 정보 얻기 핸들러
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
+            checkNum as number[],
+          )}`,
+        );
+        const result = (await response.json()) as LotteryResult[];
+        setData(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData().catch((error) => {
+      console.error(error);
+    });
+  }, [checkNum]);
+
+  // 모달창 띄우기
+  useEffect(() => {
+    setPortalElement(document.getElementById("portal"));
+  }, [isDetailModal]);
+
   return (
     <>
       <main className="pb-20 sm:w-screen  md:w-[22.5rem]">
@@ -147,11 +216,12 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               onChange={searchHandler}
             />
             <Image
-              src="/img/icon_search.svg"
+              src={`${searchKeyword.length > 0 ? '/img/icon_search.svg' : '/img/icon_search_trans.svg'}`}
               alt="img"
               width={20}
               height={20}
-              className="absolute right-5 top-6 cursor-pointer"
+              className="absolute right-5 top-5 cursor-pointer"
+              onClick={getDetailData}
             />
             <div className="mb-4 flex items-center justify-between text-sm">
               <button
@@ -197,9 +267,13 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               <>
                 {checkNum.map((item, idx) => {
                   return (
-                    <span
+                    <button
                       key={idx}
+                      value={String(item)}
                       className=" mr-[0.37rem]  inline-block cursor-pointer rounded-[0.63rem] bg-point/[.6] px-[0.62rem] py-[0.38rem] text-sm text-white"
+                      onClick={() =>
+                        setCheckNum(checkNum.filter((num) => num !== item))
+                      }
                     >
                       {item}
                       <Image
@@ -209,7 +283,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                         height={12}
                         className="float-right ml-[0.5rem]"
                       />
-                    </span>
+                    </button>
                   );
                 })}
               </>
@@ -258,6 +332,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                   className="relative mb-[0.38rem] overflow-hidden rounded-[1.25rem] bg-white p-5 text-black"
                   key={idx}
                 >
+                  <button
+                    className="absolute left-0 top-0 z-50 h-[100%] w-[100%] cursor-pointer"
+                    onClick={openLottoDetailModal}
+                    value={idx}
+                  />
                   {isMultiCheck && (
                     <div className="absolute left-0 top-0 z-[11] h-full bg-black/[.5] sm:w-full md:w-full" />
                   )}
@@ -274,7 +353,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                       {formatDate(item.date)} 추첨
                     </span>
                   </h1>
-                  <LotteryNumberBall numbers={item.numbers} bonus={isBonus} />
+                  <LotteryNumberBall
+                    numbers={item.numbers}
+                    bonus={isBonus}
+                    checkNum={checkNum}
+                  />
                   <div className="mt-[1.06rem] rounded-[0.63rem] bg-gray_1 py-3 text-center">
                     1등 총상금({item.wins[0]?.num_winners}명/
                     {formatMoney(
@@ -308,6 +391,17 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
           )}
         </div>
       </main>
+      {isDetailModal && portalElement
+        ? createPortal(
+            <LotteryDetailModal
+              data={lottoDetailList}
+              onClose={() => {
+                setIsDetailModal(false);
+              }}
+            />,
+            portalElement,
+          )
+        : null}
     </>
   );
 }

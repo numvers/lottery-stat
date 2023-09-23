@@ -1,0 +1,6 @@
+.outline {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding-bottom: env(safe-area-inset-bottom); /* 하단 안전 영역 고려 */
+}

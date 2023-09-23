@@ -95,7 +95,7 @@ export default function Home() {
               모두보기
             </span>
           </h1>
-          <div className="gradient-container mb-[0.37rem] rounded-[1.25rem] p-[0.1rem]">
+          <div className="gradient-container mb-[0.37rem] rounded-[1.25rem] p-[0.15rem]">
             <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
               <div>
                 <h2 className="flex items-center font-semibold">
@@ -116,7 +116,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="mb-[0.37rem] rounded-[1.25rem] p-[0.1rem]">
+          <div className="mb-[0.37rem] rounded-[1.25rem]">
             <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
               <div>
                 <h2 className="font-semibold">능이버섯</h2>
