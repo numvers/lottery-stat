@@ -164,6 +164,19 @@ function numbersFrom(menu: menu, exclusions: number[]) {
 
   switch (menu) {
     case "odd-even":
+      let evenLeft = numLeftRandom.filter((v) => v % 2 == 0).length;
+      let oddLeft = numLeftRandom.length - evenLeft;
+      return numLeftRandom.filter((v) => {
+        if (evenLeft >= oddLeft && v % 2 == 0) {
+          evenLeft -= 1;
+          return true;
+        }
+        if (oddLeft > evenLeft && v % 2 == 1) {
+          oddLeft -= 1;
+          return true;
+        }
+        return false;
+      });
     case "missing":
       return numLeftRandom.filter((n) => missing.includes(n));
     case "pick":
@@ -177,7 +190,7 @@ function SubmitButton(props: SubmitButtonProps) {
   return (
     <button
       className={`bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] ${
-        props.numPicks < 6 ? "bg-gray_4" : "bg-point"
+        props.menu == "pick" && props.numPicks < 6 ? "bg-gray_4" : "bg-point"
       } text-center`}
       {...props}
     >
