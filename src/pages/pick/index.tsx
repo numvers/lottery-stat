@@ -69,9 +69,15 @@ export default function Pick() {
           }
           setPicks([num, ...picks]);
         }}
+        removePicks={(num: number) => {
+          setPicks(picks.filter((n) => n != num));
+        }}
         exclusions={exclusions}
         addExclusions={(num: number) => {
           setExclusions([num, ...exclusions]);
+        }}
+        removeExclusions={(num: number) => {
+          setExclusions(exclusions.filter((n) => n != num));
         }}
       ></NumberBoard>
       {(0 < picks.length || menu != "pick") && (
@@ -166,8 +172,10 @@ function submitMessageFrom(menu: menu, numPicks: number) {
 const NumberBoard = ({
   picks,
   addPicks,
+  removePicks,
   exclusions,
   addExclusions,
+  removeExclusions,
 }: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
@@ -186,6 +194,7 @@ const NumberBoard = ({
                   number={sortedPicks[i] ?? 0}
                   excluded={false}
                   picked={true}
+                  onClick={() => removePicks(sortedPicks[i] ?? 0)}
                 ></NumberBall>
               );
             }
@@ -210,18 +219,20 @@ const NumberBoard = ({
             <NumberBall
               key={number}
               number={number}
+              disabled={picks.includes(number)}
               picked={picks.includes(number)}
               excluded={exclusions.includes(number)}
               onClick={() => {
+                if (isExcluding && exclusions.includes(number)) {
+                  removeExclusions(number);
+                  return;
+                }
                 if (isExcluding) {
                   addExclusions(number);
-                  console.log(
-                    `excluding ${number} for ${exclusions.toString()}`,
-                  );
-                } else {
-                  addPicks(number);
-                  console.log(`picking ${number} for ${picks.toString()}`);
+                  return;
                 }
+                addPicks(number);
+                console.log(`picking ${number} for ${picks.toString()}`);
               }}
             ></NumberBall>
           ))}
@@ -244,8 +255,10 @@ const NumberBoard = ({
 interface NumberBoardProps {
   picks: number[];
   addPicks: (num: number) => void;
+  removePicks: (num: number) => void;
   exclusions: number[];
   addExclusions: (num: number) => void;
+  removeExclusions: (num: number) => void;
 }
 
 function BlankBall() {
@@ -271,11 +284,7 @@ const NumberBall = (props: NumberBallProps) => {
     textColor = "gray_3";
   }
   return (
-    <button
-      className="relative flex items-center justify-center"
-      disabled={props.picked || props.excluded}
-      {...props}
-    >
+    <button className="relative flex items-center justify-center" {...props}>
       <div className={`absolute z-10 font-semibold text-${textColor}`}>
         {props.number}
       </div>
