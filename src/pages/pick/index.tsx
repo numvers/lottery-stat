@@ -26,10 +26,16 @@ export default function Pick() {
       </div>
       <nav className="align-center mb-[1.25rem] flex h-[2.5rem] gap-[0.37rem] overflow-auto ">
         <Image
-          src="/img/button_blue_plus.svg"
-          alt="button_blue_plus"
+          src={
+            menu == "pick"
+              ? `/img/button_blue_plus.svg`
+              : `/img/button_gray_4_plus.svg`
+          }
+          alt="img button pick"
           width={0}
           height={0}
+          className="cursor-pointer"
+          onClick={() => setMenu("pick")}
           style={{ width: "2.5rem", height: "2.5rem" }}
         />
         <NavButton activated={menu == "uju"} onClick={() => setMenu("uju")}>
