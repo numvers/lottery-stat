@@ -3,8 +3,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
 
+type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
+
 export default function Pick() {
   const router = useRouter();
+  const [menu, setMenu] = useState<menu>("pick");
   const [picks, setPicks] = useState<number[]>([]);
   const [exclusions, setExclusions] = useState<number[]>([]);
   return (
@@ -27,12 +30,29 @@ export default function Pick() {
           height={0}
           style={{ width: "2.5rem", height: "2.5rem" }}
         />
-        <NavButton>우주추천</NavButton>
-        <NavButton>랜덤뽑기</NavButton>
-        <NavButton>미출현 번호</NavButton>
-        <NavButton>짝홀조합</NavButton>
+        <NavButton activated={menu == "uju"} onClick={() => setMenu("uju")}>
+          우주추천
+        </NavButton>
+        <NavButton
+          activated={menu == "random"}
+          onClick={() => setMenu("random")}
+        >
+          랜덤뽑기
+        </NavButton>
+        <NavButton
+          activated={menu == "missing"}
+          onClick={() => setMenu("missing")}
+        >
+          미출현 번호
+        </NavButton>
+        <NavButton
+          activated={menu == "odd-even"}
+          onClick={() => setMenu("odd-even")}
+        >
+          짝홀조합
+        </NavButton>
       </nav>
-      <div className="text-center">번호를 직접 선택해보세요!</div>
+      <div className="text-center">{navMessageFrom(menu, picks.length)}</div>
       <hr
         className="my-[1.19rem]"
         style={{
@@ -54,17 +74,44 @@ export default function Pick() {
           setExclusions([num, ...exclusions]);
         }}
       ></NumberBoard>
+      <div className="bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] bg-point text-center">
+        <p>선택하세요</p>
+      </div>
     </main>
   );
 }
 
-function NavButton(props: React.ComponentPropsWithoutRef<"button">) {
+function NavButton(props: NavButtonProps) {
   return (
     <button
-      className="min-w-[4.75rem] flex-shrink-0 rounded-[20px] bg-[#242429] px-[0.44rem]"
+      className={`min-w-[4.75rem] flex-shrink-0 rounded-[20px] ${
+        props.activated ? "bg-point" : "bg-[#242429]"
+      } px-[0.44rem]`}
       {...props}
     ></button>
   );
+}
+
+interface NavButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+  activated: boolean;
+}
+
+function navMessageFrom(menu: menu, numPicked: number) {
+  switch (menu) {
+    case "pick":
+      return "번호를 직접 선택해보세요!";
+    case "uju":
+      return "우주 번호가 나옵니다";
+    case "random":
+      if (0 < numPicked) {
+        return "남은 번호는 랜덤하게 채우세요!";
+      }
+      return "무작위 번호가 나옵니다";
+    case "missing":
+      return "최근 5회차 중 추첨되지 않았던 번호들 중에 랜덤";
+    case "odd-even":
+      return "짝수 3개, 홀수 3개 랜덤 선택";
+  }
 }
 
 const NumberBoard = ({
