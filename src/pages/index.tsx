@@ -105,7 +105,11 @@ export function RecentLotteryCardComponent({
             className="ml-[1rem] cursor-pointer"
           />
         </div>
-        <LotteryNumberBall numbers={recentData.numbers} bonus={true} checkNum={[]}/>
+        <LotteryNumberBall
+          numbers={recentData.numbers}
+          bonus={true}
+          checkNum={[]}
+        />
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] text-base leading-[4rem] text-white">
           <span className="font-semibold">1등 총상금</span>
           {recentData.wins[0]?.num_winners}명/
@@ -144,9 +148,7 @@ export function RecentLotteryListCardComponent({
                 key={idx}
                 className="col-span-4 mt-[0.625rem] grid grid-cols-4 py-[0.15rem]"
               >
-                <li className="col-start-1 font-semibold">
-                  {idx + 1}
-                </li>
+                <li className="col-start-1 font-semibold">{idx + 1}</li>
                 <li className="col-span-2 col-start-2 font-regular">
                   {getEraseFourDigits(item.wins[0]?.prize)}원
                 </li>
@@ -164,6 +166,10 @@ export function RecentLotteryListCardComponent({
 
 // 메인 하단 커뮤니티 카드 컴포넌트
 export function CommunityCardComponent() {
+  const goLotto = () => {
+    window.open("https://naver.me/G1sv6LzV", "_blank");
+  };
+
   return (
     <div className="pb-[5.625rem]">
       <h1 className="mb-[0.75rem] text-xl font-semibold">Community</h1>
@@ -171,7 +177,10 @@ export function CommunityCardComponent() {
         로또를 이용하는 전국의 사용자들과 소통해요!
       </span>
       <div className="grid  grid-cols-2 gap-2 text-base text-black">
-        <div className="relative col-span-2 h-[10rem] cursor-pointer overflow-hidden rounded-[1.25rem] bg-blue p-[1.25rem] text-white ">
+        <div
+          className="relative col-span-2 h-[10rem] cursor-pointer overflow-hidden rounded-[1.25rem] bg-blue p-[1.25rem] text-white"
+          onClick={goLotto}
+        >
           <h2 className="relative z-10 mb-[0.4375rem] font-semibold">
             1등 당첨이 가장 많이 배출된 곳은?
           </h2>
@@ -188,7 +197,10 @@ export function CommunityCardComponent() {
           <div className="absolute bottom-[5.19rem] right-[1.69rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
           <div className="absolute left-[0.87rem] top-[7.44rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
         </div>
-        <div className="relative h-[12.5rem] cursor-pointer rounded-[1.25rem] bg-gray_2 p-[1.25rem]">
+        <div
+          className="relative h-[12.5rem] cursor-pointer rounded-[1.25rem] bg-gray_2 p-[1.25rem]"
+          onClick={() => alert("Coming Soon!😉")}
+        >
           <h2 className="mb-[0.4375rem] font-semibold">톡톡 로또</h2>
           <span className="text-xs">
             소소한 로또 라이프를
@@ -204,11 +216,17 @@ export function CommunityCardComponent() {
           />
         </div>
         <div className="grid grid-rows-2 gap-2">
-          <div className="cursor-pointer rounded-[1.25rem] bg-yellow p-[1.25rem]">
+          <div
+            className="cursor-pointer rounded-[1.25rem] bg-yellow p-[1.25rem]"
+            onClick={() => alert("Coming Soon!😉")}
+          >
             <h2 className="mb-[0.4375rem] font-semibold">명예의 전당</h2>
             <span className="text-xs">로또 당첨자들의 후기</span>
           </div>
-          <div className="cursor-pointer rounded-[1.25rem] bg-white p-[1.25rem]">
+          <div
+            className="cursor-pointer rounded-[1.25rem] bg-white p-[1.25rem]"
+            onClick={() => alert("Coming Soon!😉")}
+          >
             <h2 className="mb-[0.4375rem] flex items-center font-semibold">
               인기글
               <span className="ml-[0.1875rem] rounded-[0.25rem] bg-red px-[0.3125rem] py-[0.1875rem] text-xxs text-white">
@@ -243,12 +261,3 @@ export async function getServerSideProps() {
     },
   };
 }
-
-// 회차별 당첨번호 조회 (ex 999회 /lotteries/999)
-// const response = await fetch("http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries/999");
-// 당첨번호 검색 4를 포함하는 경우
-// const response = await fetch("http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?include=4");
-// 당첨번호 검색 5, 10을 포함하는 경우
-// const response = await fetch("http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?include=5&include=10");
-// 당첨번호 검색을 하지 않고 전체 번호를 조회하는 경우 (기존이랑 같음)
-// const response = await fetch("http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries");
