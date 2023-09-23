@@ -4,12 +4,16 @@ import { useState } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
 import { api } from "../../utils/api";
 
-type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
+export type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
 
 export default function Pick() {
+  return <PickPage firstMenu="pick"></PickPage>;
+}
+
+export function PickPage({ firstMenu }: { firstMenu: menu }) {
   const router = useRouter();
   const mutation = api.lottery.createLottery.useMutation();
-  const [menu, setMenu] = useState<menu>("pick");
+  const [menu, setMenu] = useState<menu>(firstMenu);
   const [picks, setPicks] = useState<number[]>([]);
   const [exclusions, setExclusions] = useState<number[]>([]);
   return (
