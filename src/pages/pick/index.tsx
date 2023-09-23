@@ -167,6 +167,9 @@ interface SubmitButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 }
 
 function submitMessageFrom(menu: menu, numPicks: number) {
+  if (numPicks == 6) {
+    return `선택완료 ${numPicks}/6`;
+  }
   switch (menu) {
     case "pick":
       return `선택완료 ${numPicks}/6`;
