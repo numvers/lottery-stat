@@ -174,9 +174,7 @@ function numbersFrom(menu: menu, exclusions: number[]) {
     .sort((a, b) => a.sort - b.sort)
     .map(({ num }) => num);
 
-  const missing = [
-    2, 6, 10, 11, 19, 20, 25, 28, 30, 35, 37, 39, 40, 41, 43, 45,
-  ];
+  const missing = [2, 6, 10, 19, 20, 28, 30, 39, 40, 41, 43, 45];
 
   switch (menu) {
     case "odd-even":
