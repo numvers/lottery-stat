@@ -146,11 +146,20 @@ function numbersFrom(menu: menu, exclusions: number[]) {
     (n) => !exclusions.includes(n),
   );
 
+  const missing = [
+    2, 6, 10, 11, 19, 20, 25, 28, 30, 35, 37, 39, 40, 41, 43, 45,
+  ];
+
   switch (menu) {
     case "odd-even":
+    case "missing":
+      return missing
+        .filter((n) => !exclusions.includes(n))
+        .map((value) => ({ num: value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ num }) => num);
     case "pick":
     case "uju":
-    case "missing":
     case "random":
       return numLeft
         .map((value) => ({ num: value, sort: Math.random() }))
@@ -214,7 +223,6 @@ const NumberBoard = ({
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
           {Array.from(Array(6), (_, i) => i).map((i) => {
-            console.log(sortedPicks);
             if (i < sortedPicks.length) {
               return (
                 <NumberBall
