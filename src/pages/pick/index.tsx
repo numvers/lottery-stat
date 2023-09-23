@@ -63,20 +63,20 @@ export default function Pick() {
       ></hr>
       <NumberBoard
         picks={picks}
-        addPicks={(num: number) => {
+        addPick={(num: number) => {
           if (6 <= picks.length) {
             alert("번호는 6개 이하로 선택 가능합니다.");
           }
           setPicks([num, ...picks]);
         }}
-        removePicks={(num: number) => {
-          setPicks(picks.filter((n) => n != num));
+        removePicks={(...numToRemove: number[]) => {
+          setPicks(picks.filter((n) => !numToRemove.includes(n)));
         }}
         exclusions={exclusions}
-        addExclusions={(num: number) => {
+        addExclusion={(num: number) => {
           setExclusions([num, ...exclusions]);
         }}
-        removeExclusions={(num: number) => {
+        removeExclusion={(num: number) => {
           setExclusions(exclusions.filter((n) => n != num));
         }}
       ></NumberBoard>
@@ -171,11 +171,11 @@ function submitMessageFrom(menu: menu, numPicks: number) {
 
 const NumberBoard = ({
   picks,
-  addPicks,
+  addPick: addPicks,
   removePicks,
   exclusions,
-  addExclusions,
-  removeExclusions,
+  addExclusion: addExclusions,
+  removeExclusion: removeExclusions,
 }: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
@@ -207,6 +207,10 @@ const NumberBoard = ({
           width={0}
           height={0}
           style={{ width: "1.25rem", height: "1.25rem" }}
+          className="cursor-pointer"
+          onClick={() => {
+            removePicks(...picks);
+          }}
         />
       </div>
       <div
@@ -254,11 +258,11 @@ const NumberBoard = ({
 
 interface NumberBoardProps {
   picks: number[];
-  addPicks: (num: number) => void;
-  removePicks: (num: number) => void;
+  addPick: (num: number) => void;
+  removePicks: (...num: number[]) => void;
   exclusions: number[];
-  addExclusions: (num: number) => void;
-  removeExclusions: (num: number) => void;
+  addExclusion: (num: number) => void;
+  removeExclusion: (num: number) => void;
 }
 
 function BlankBall() {
