@@ -51,7 +51,7 @@ export default function List() {
           />
         </div>
         <div className="relative px-[1.25rem]">
-          <div className="mb-[0.37rem] rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] p-[0.1rem]">
+          <div className="mb-[0.37rem] rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] p-[0.15rem]">
             <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
               <div>
                 <h2 className="font-semibold">능이버섯</h2>
@@ -63,7 +63,7 @@ export default function List() {
               />
             </div>
           </div>
-          <div className="mb-[0.37rem] rounded-[1.25rem] p-[0.1rem]">
+          <div className="mb-[0.37rem] rounded-[1.25rem]">
             <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
               <div>
                 <h2 className="font-semibold">능이버섯</h2>
