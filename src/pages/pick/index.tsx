@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useState } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
 
 export default function Pick() {
@@ -43,9 +43,16 @@ export default function Pick() {
       ></hr>
       <NumberBoard
         picks={picks}
-        setPicks={setPicks}
+        addPicks={(num: number) => {
+          if (7 <= picks.length) {
+            alert("번호는 7개 이하로 선택 가능합니다.");
+          }
+          setPicks([num, ...picks]);
+        }}
         exclusions={exclusions}
-        setExclusions={setExclusions}
+        addExclusions={(num: number) => {
+          setExclusions([num, ...exclusions]);
+        }}
       ></NumberBoard>
     </main>
   );
@@ -62,9 +69,9 @@ function NavButton(props: React.ComponentPropsWithoutRef<"button">) {
 
 const NumberBoard = ({
   picks,
-  setPicks,
+  addPicks,
   exclusions,
-  setExclusions,
+  addExclusions,
 }: NumberBoardProps) => {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
   const [isExcluding, setIsExcluding] = useState(false);
@@ -75,7 +82,7 @@ const NumberBoard = ({
       <div className="mb-[0.75rem] text-xl">My lotto</div>
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
-          {Array.from(Array(6), (_, i) => i).map((i) => {
+          {Array.from(Array(7), (_, i) => i).map((i) => {
             if (i < sortedPicks.length) {
               return (
                 <NumberBall
@@ -111,12 +118,12 @@ const NumberBoard = ({
               excluded={exclusions.includes(number)}
               onClick={() => {
                 if (isExcluding) {
-                  setExclusions([number, ...exclusions]);
+                  addExclusions(number);
                   console.log(
                     `excluding ${number} for ${exclusions.toString()}`,
                   );
                 } else {
-                  setPicks([number, ...picks]);
+                  addPicks(number);
                   console.log(`picking ${number} for ${picks.toString()}`);
                 }
               }}
@@ -140,9 +147,9 @@ const NumberBoard = ({
 
 interface NumberBoardProps {
   picks: number[];
-  setPicks: Dispatch<SetStateAction<number[]>>;
+  addPicks: (num: number) => void;
   exclusions: number[];
-  setExclusions: Dispatch<SetStateAction<number[]>>;
+  addExclusions: (num: number) => void;
 }
 
 function BlankBall() {
@@ -179,8 +186,9 @@ const NumberBall = (props: NumberBallProps) => {
       <Image
         src={`/img/ball_${color}.svg`}
         alt={`${color} ${props.number} ball`}
-        width={32}
-        height={32}
+        width={0}
+        height={0}
+        style={{ width: "2.5rem" }}
       ></Image>
     </button>
   );
