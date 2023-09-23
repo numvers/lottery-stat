@@ -74,9 +74,9 @@ export default function Pick() {
           setExclusions([num, ...exclusions]);
         }}
       ></NumberBoard>
-      <div className="bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] bg-point text-center">
-        <p>선택하세요</p>
-      </div>
+      {(0 < picks.length || menu != "pick") && (
+        <SubmitButton menu={menu} numPicks={picks.length}></SubmitButton>
+      )}
     </main>
   );
 }
@@ -111,6 +111,55 @@ function navMessageFrom(menu: menu, numPicked: number) {
       return "최근 5회차 중 추첨되지 않았던 번호들 중에 랜덤";
     case "odd-even":
       return "짝수 3개, 홀수 3개 랜덤 선택";
+  }
+}
+
+function numbersFrom(menu: menu, exclusions: number[]) {
+  return Array.from(Array(45), (_, i) => i + 1)
+    .filter((n) => !exclusions.includes(n))
+    .map((n) => ({ n, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((n) => n);
+}
+
+function SubmitButton(props: SubmitButtonProps) {
+  const disabled = props.menu == "pick" && props.numPicks < 6;
+  return (
+    <button
+      className={`bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] ${
+        disabled ? "bg-gray_4" : "bg-point"
+      } text-center`}
+      onClick={() => {
+        if (disabled) {
+          alert("6개가 전부 채워지면 저장가능합니다.");
+        } else {
+          alert("TODO: 저장 페이지로 이동");
+        }
+      }}
+      {...props}
+    >
+      <p>{submitMessageFrom(props.menu, props.numPicks)}</p>
+    </button>
+  );
+}
+
+interface SubmitButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+  menu: menu;
+  numPicks: number;
+}
+
+function submitMessageFrom(menu: menu, numPicks: number) {
+  switch (menu) {
+    case "pick":
+      return `선택완료 ${numPicks}/6`;
+    case "uju":
+      return `우주 픽`;
+    case "random":
+      return `랜덤 뽑기`;
+    case "missing":
+      return `미출현 번호 뽑기`;
+    case "odd-even":
+      return `짝홀뽑기`;
   }
 }
 
