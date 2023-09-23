@@ -1,14 +1,16 @@
 import {
   int,
-  mysqlTable,
+  mysqlTableCreator,
   primaryKey,
   text,
   timestamp,
   tinyint,
 } from "drizzle-orm/mysql-core";
 
+export const mysqlTable = mysqlTableCreator((name) => `lottery-stat_${name}`);
+
 export const lotteryStatLotteries = mysqlTable(
-  "lottery-stat_lotteries",
+  "lotteries",
   {
     id: int("id").notNull().autoincrement(),
     createdAt: timestamp("created_at", { mode: "string" })
