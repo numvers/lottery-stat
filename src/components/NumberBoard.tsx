@@ -83,7 +83,9 @@ export default function NumberBoard({
               value={number}
               id={String(idx)}
               className="hidden"
-              onChange={checkNumHandler}
+              onChange={({ target }) => {
+                arrayListItemHandler(Number(target.value), target.checked);
+              }}
               checked={checkNum.includes(number)}
             />
             <label

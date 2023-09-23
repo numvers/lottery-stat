@@ -14,9 +14,9 @@ export const renderNumberBall = (item: number, idx: number) => {
   return (
     <div
       key={idx}
-      className="relative float-left mx-[0.1875rem] flex h-[2rem] w-[2rem] items-center justify-center"
+      className="relative float-left mx-[0.1875rem] flex h-[1.5rem] w-[1.5rem] items-center justify-center"
     >
-      <h1 className="absolute z-10 font-semibold">{item}</h1>
+      <h1 className="absolute z-10 font-semibold text-xs">{item}</h1>
       <Image
         src={`/img/ball_${numColor}.svg`}
         alt="img"
@@ -27,7 +27,7 @@ export const renderNumberBall = (item: number, idx: number) => {
   );
 };
 
-export default function LotteryNumberBall({
+export default function LotteryNumberBallSmall({
   numbers,
   bonus,
 }: {
