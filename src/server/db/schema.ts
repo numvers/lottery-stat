@@ -1,12 +1,14 @@
 import { relations, sql } from "drizzle-orm";
 import {
   bigint,
+  datetime,
   index,
   int,
   mysqlTableCreator,
   primaryKey,
   text,
   timestamp,
+  tinyint,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
@@ -32,7 +34,7 @@ export const example = mysqlTable(
   },
   (example) => ({
     nameIndex: uniqueIndex("name_idx").on(example.name),
-  })
+  }),
 );
 
 export const users = mysqlTable("user", {
@@ -70,7 +72,7 @@ export const accounts = mysqlTable(
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
     userIdIdx: index("userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -88,7 +90,7 @@ export const sessions = mysqlTable(
   },
   (session) => ({
     userIdIdx: index("userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -104,5 +106,19 @@ export const verificationTokens = mysqlTable(
   },
   (vt) => ({
     compoundKey: primaryKey(vt.identifier, vt.token),
-  })
+  }),
 );
+
+export const lotteries = mysqlTable("lotteries", {
+  id: int("id").primaryKey(),
+  created_at: datetime("created_at")
+    .notNull()
+    .$defaultFn(() => new Date()),
+  first: tinyint("first").notNull(),
+  second: tinyint("second").notNull(),
+  third: tinyint("third").notNull(),
+  forth: tinyint("forth").notNull(),
+  fifth: tinyint("fifth").notNull(),
+  sixth: tinyint("fifth").notNull(),
+  bonus: tinyint("bonus").notNull(),
+});
