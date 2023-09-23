@@ -37,8 +37,10 @@ export default function Home({
   return (
     <>
       <main className="sm:w-screen md:w-[22.5rem] ">
-        <div className="h-[3.75rem] bg-red">Logo</div>
         <div className="px-[1.25rem]">
+          <div className="flex h-[3.75rem] items-center">
+            <Image src="/img/logo.png" alt="img" width={82} height={30} />
+          </div>
           {/* 메인 상단 박스 */}
           <div className="mb-[2.5rem]  text-center">
             {/* 오늘부터 복권당첨일까지 남은 시간 */}

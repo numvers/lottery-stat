@@ -42,7 +42,7 @@ export default function LotteryNumberBall({
   checkNum: (number | boolean)[];
 }) {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center text-black">
       {numbers
         .slice(0, 6)
         .map((item, idx) => renderNumberBall(item, idx, checkNum))}

@@ -16,7 +16,7 @@ export const renderNumberBall = (item: number, idx: number) => {
       key={idx}
       className="relative float-left mx-[0.1875rem] flex h-[1.5rem] w-[1.5rem] items-center justify-center"
     >
-      <h1 className="absolute z-10 font-semibold text-xs">{item}</h1>
+      <h1 className="absolute z-10 text-xs font-semibold">{item}</h1>
       <Image
         src={`/img/ball_${numColor}.svg`}
         alt="img"
@@ -35,7 +35,7 @@ export default function LotteryNumberBallSmall({
   bonus: boolean;
 }) {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center text-black">
       {numbers.slice(0, 6).map((item, idx) => renderNumberBall(item, idx))}
       {!bonus && (
         <>
