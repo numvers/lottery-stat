@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
+import LotteryDetailModal from "~/components/LotteryDetailModal";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import NumberBoard from "~/components/NumberBoard";
 import useIntersectionObserver from "~/hooks/useIntersectionObserver";
@@ -40,6 +42,10 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // Infinite scroll
   const [isLoaded, setIsLoaded] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
+  // 상세정보 모달창
+  const [isDetailModal, setIsDetailModal] = useState(false);
+  const [portalElement, setPortalElement] = useState<Element | null>(null);
+  const [lottoDetailList, setLottoDetailList] = useState<LotteryResult[]>([]);
 
   // top 버튼(페이지 상단으로 이동)
   const scrollToTop = () => {
@@ -52,6 +58,22 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // 뒤로가기
   const handleClick = () => {
     router.back();
+  };
+
+  // 로또번호 상세 모달창 열기
+  const openLottoDetailModal = (event: React.MouseEvent<HTMLElement>) => {
+    const value = Number((event.target as HTMLButtonElement).value);
+
+    // allData와 data를 합친 새로운 배열을 생성
+    const combinedData = allData.length > 0 ? [...allData] : [...data];
+
+    // value 위치의 데이터를 가져와서 배열 형태로 설정
+    const selectedData = combinedData[value];
+
+    if (selectedData) {
+      setLottoDetailList([selectedData]); // 배열 형태로 설정
+      setIsDetailModal(true);
+    }
   };
 
   // 로또 조회 핸들러
@@ -147,6 +169,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
       console.error(error);
     });
   }, [checkNum]);
+
+  // 모달창 띄우기
+  useEffect(() => {
+    setPortalElement(document.getElementById("portal"));
+  }, [isDetailModal]);
 
   return (
     <>
@@ -287,6 +314,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                   className="relative mb-[0.38rem] overflow-hidden rounded-[1.25rem] bg-white p-5 text-black"
                   key={idx}
                 >
+                  <button
+                    className="absolute left-0 top-0 z-50 h-[100%] w-[100%] cursor-pointer"
+                    onClick={openLottoDetailModal}
+                    value={idx}
+                  />
                   {isMultiCheck && (
                     <div className="absolute left-0 top-0 z-[11] h-full bg-black/[.5] sm:w-full md:w-full" />
                   )}
@@ -303,7 +335,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                       {formatDate(item.date)} 추첨
                     </span>
                   </h1>
-                  <LotteryNumberBall numbers={item.numbers} bonus={isBonus} checkNum={checkNum} />
+                  <LotteryNumberBall
+                    numbers={item.numbers}
+                    bonus={isBonus}
+                    checkNum={checkNum}
+                  />
                   <div className="mt-[1.06rem] rounded-[0.63rem] bg-gray_1 py-3 text-center">
                     1등 총상금({item.wins[0]?.num_winners}명/
                     {formatMoney(
@@ -337,6 +373,17 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
           )}
         </div>
       </main>
+      {isDetailModal && portalElement
+        ? createPortal(
+            <LotteryDetailModal
+              data={lottoDetailList}
+              onClose={() => {
+                setIsDetailModal(false);
+              }}
+            />,
+            portalElement,
+          )
+        : null}
     </>
   );
 }
