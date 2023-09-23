@@ -20,12 +20,12 @@ export default function NavBar() {
     {
       name: "번호 뽑기",
       path: "/select",
-      img: "/img/icon_heart.svg",
+      img: "/img/icon_line_plus.svg",
     },
     {
       name: "번호저장함",
       path: "/saved",
-      img: "/img/icon_message.svg",
+      img: "/img/icon_storage.svg",
     },
   ];
 
