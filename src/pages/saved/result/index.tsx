@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import LotteryNumberBall from "~/components/LotteryNumberBall";
 import { useEffect, useState } from "react";
+import { api } from "../../../utils/api";
 
 export const getColorClass = (item: number) => {
   if (item <= 10) return "yellow";
@@ -22,6 +22,7 @@ interface LocationLotto {
 
 export default function Home({ nickname }: { nickname: nicknameResult }) {
   const router = useRouter();
+  const mutate = api.lottery.createLottery.useMutation();
 
   const [dataList, setDataList] = useState<LocationLotto[]>([]);
 
@@ -35,6 +36,31 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
       .catch((error) => {
         console.error("클립보드 복사 오류:", error);
       });
+    dataList.forEach((v) => {
+      mutate.mutate({
+        nickname: nickname.words[0] ?? "열일하는 개발자",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-nocheck
+        type: typeFromStr(v.type),
+        numbers: v.numbers,
+      });
+    });
+  };
+
+  const typeFromStr = (str: string) => {
+    if (str == "pick") {
+      return "pick";
+    }
+    if (str == "uju") {
+      return "uju";
+    }
+    if (str == "random") {
+      return "random";
+    }
+    if (str == "odd-even") {
+      return "odd-even";
+    }
+    return "missing";
   };
 
   useEffect(() => {
