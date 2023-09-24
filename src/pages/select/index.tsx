@@ -1,15 +1,17 @@
 import Image from "next/image";
-import LotteryNumberBallSmall from "~/components/LotteryNumberBallSmall";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Mousewheel, Autoplay } from "swiper";
-import "../../../node_modules/swiper/swiper.min.css";
-import "../../../node_modules/swiper/modules/pagination/pagination.min.css";
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { Autoplay, Mousewheel, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "../../../node_modules/swiper/modules/pagination/pagination.min.css";
+import "../../../node_modules/swiper/swiper.min.css";
+import UserLottery from "../../components/UserLottery";
+import { api } from "../../utils/api";
 
 export default function Home() {
   const router = useRouter();
   // 검색 정규화 번호-번호-번호- 이렇게 그냥 집어넣기 10-200-30-40 이여도 상관없음
+  const query = api.lottery.findLottery.useQuery();
   const active =
     "gradient-container flex h-[3.75rem] w-[65%] items-center justify-between rounded-full pl-[1.2rem] pr-[0.63rem] text-center text-md font-semibold";
   const disabled =
@@ -97,39 +99,16 @@ export default function Home() {
               모두보기
             </span>
           </h1>
-          <div className="gradient-container mb-[0.37rem] rounded-[1.25rem] p-[0.15rem]">
-            <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
-              <div>
-                <h2 className="flex items-center font-semibold">
-                  능이버섯
-                  <Image
-                    src="/img/icon_spaceship.svg"
-                    alt="img"
-                    width={26}
-                    height={14}
-                    className="ml-1"
-                  />
-                </h2>
-                <span className="text-xs">23.09.12</span>
-              </div>
-              <LotteryNumberBallSmall
-                numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={true}
-              />
-            </div>
-          </div>
-          <div className="mb-[0.37rem] rounded-[1.25rem]">
-            <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
-              <div>
-                <h2 className="font-semibold">능이버섯</h2>
-                <span className="text-xs">23.09.12</span>
-              </div>
-              <LotteryNumberBallSmall
-                numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={true}
-              />
-            </div>
-          </div>
+          {query.data?.map((v, i) => (
+            <UserLottery
+              key={i}
+              numbers={[v.first, v.second, v.third, v.forth, v.fifth, v.sixth]}
+              bonus={false}
+              menu={v.type}
+              created_at={v.createdAt}
+              nickname={v.nickname}
+            ></UserLottery>
+          ))}
         </div>
       </main>
     </>
