@@ -16,6 +16,7 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
   const [menu, setMenu] = useState<menu>(firstMenu);
   const [picks, setPicks] = useState<number[]>([]);
   const [exclusions, setExclusions] = useState<number[]>([]);
+  const [hover, setHover] = useState(false);
   return (
     <main className="px-[1rem] pb-20 sm:w-screen md:w-[22.5rem]">
       <div className="flex h-[3.75rem]">
@@ -74,7 +75,7 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
         }}
       ></hr>
       {menu == "uju" ? (
-        <SpaceBoard></SpaceBoard>
+        <SpaceBoard animate={hover}></SpaceBoard>
       ) : (
         <NumberBoard
           picks={picks}
@@ -101,6 +102,8 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
         <SubmitButton
           menu={menu}
           numPicks={picks.length}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
           onClick={() => {
             if (menu == "pick" && picks.length < 6) {
               alert("번호 6개 모두 선택해주세요");
@@ -338,18 +341,60 @@ const NumberBoard = ({
   );
 };
 
-function SpaceBoard() {
+function SpaceBoard({ animate }: { animate: boolean }) {
   return (
     <div className="mb-[6.63rem]">
-      <Image
-        src="/img/space.svg"
-        alt="button_blue_plus"
-        width={0}
-        height={0}
-        style={{ width: "20.5rem", height: "18.75rem" }}
-      />
+      <div className="relative inline-block">
+        <Image
+          className="display-block max-w-[100%]"
+          src="/img/space/background.svg"
+          alt="button_blue_plus"
+          width={0}
+          height={0}
+          style={{ width: "20.5rem", height: "18.75rem" }}
+        />
+        <Image
+          className={`absolute animate-pulse`}
+          src="/img/space/comet.svg"
+          alt="star"
+          width={0}
+          height={0}
+          style={{
+            top: "6.36rem",
+            right: "6rem",
+            width: "9rem",
+            height: "auto",
+          }}
+        ></Image>
+        <Image
+          className={`absolute ${animate ? "animate-spin-slow" : ""}`}
+          src="/img/space/round-star.svg"
+          alt="star"
+          width={0}
+          height={0}
+          style={{
+            top: "4.12rem",
+            right: "6rem",
+            width: "9rem",
+            height: "auto",
+          }}
+        ></Image>
+        <Image
+          className={`absolute ${animate ? "animate-bounce" : ""}`}
+          src="/img/space/star.svg"
+          alt="star"
+          width={0}
+          height={0}
+          style={{
+            top: "4.12rem",
+            right: "3rem",
+            width: "15rem",
+            height: "auto",
+          }}
+        ></Image>
+      </div>
       <p className="mt-[0.62rem] h-[4.375rem] rounded-[1.25rem] bg-gray_4 px-[1.06rem] py-[1.06rem] text-center text-sm text-gray_2">
-        과거의 로또 추첨 결과와 패턴을 분석한 방식으로,<br></br>각 번호의 출현
+        과거의 로또 추첨 결과와 패턴을 분석한 방식으로<br></br>각 번호의 출현
         빈도를 파악하여 번호를 추첨 해드려요
       </p>
     </div>
