@@ -17,13 +17,7 @@ interface LotteryResult {
     prize: number;
   }[];
 }
-export default function Home({
-  allData,
-  recentData,
-}: {
-  allData: LotteryResult[];
-  recentData: LotteryResult;
-}) {
+export default function Home({ allData }: { allData: LotteryResult[] }) {
   // 등수별 당첨금액/닫기 버튼 상태 state
   const [isCardClick, setIsCardClick] = useState(false);
   // 등수별 당첨금액/닫기 버튼 핸들러
@@ -61,7 +55,9 @@ export default function Home({
               <RecentLotteryListCardComponent allData={allData} />
             ) : (
               // 최근 당첨결과 카드 컴포넌트
-              <RecentLotteryCardComponent recentData={recentData} />
+              allData[0] && (
+                <RecentLotteryCardComponent recentData={allData[0]} />
+              )
             )}
             {/* 등수별 당첨금액 / 닫기 버튼 */}
             <div className="mt-[0.625rem] flex items-center justify-center text-sm text-gray_2">
@@ -243,22 +239,20 @@ export function CommunityCardComponent() {
   );
 }
 
+function getLotteryResult(): Promise<LotteryResult[]> {
+  return fetch("https://lottery-stat.fly.dev/lotteries")
+    .then((res) => res.json())
+    .then((res) => {
+      return res as LotteryResult[];
+    });
+}
+
 // TODO: 성능 개선
 export async function getServerSideProps() {
-  // 전체 당첨번호 조회
-  const allResponse = await fetch("https://lottery-stat.fly.dev/lotteries");
-  // 가장 최신의 당첨번호 조회 (/lotteries/0 로 호출)
-  const recentResponse = await fetch(
-    "https://lottery-stat.fly.dev/lotteries/0",
-  );
-
-  const allData = (await allResponse.json()) as LotteryResult;
-  const recentData = (await recentResponse.json()) as LotteryResult;
-
+  const allData = await getLotteryResult();
   return {
     props: {
-      allData,
-      recentData,
+      allData: allData.slice(0, 10),
     },
   };
 }
