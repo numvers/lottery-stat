@@ -1,14 +1,53 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
+import { useEffect, useState } from "react";
 
+export const getColorClass = (item: number) => {
+  if (item <= 10) return "yellow";
+  if (item <= 20) return "blue";
+  if (item <= 30) return "red";
+  if (item <= 40) return "black";
+  return "green";
+};
 interface nicknameResult {
   words: string[];
   seed: string;
 }
+interface LocationLotto {
+  type: string;
+  numbers: number[];
+  time: string;
+}
 
 export default function Home({ nickname }: { nickname: nicknameResult }) {
   const router = useRouter();
+
+  const [dataList, setDataList] = useState<LocationLotto[]>([]);
+
+  // 클릭 이벤트 핸들러
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(JSON.stringify(dataList))
+      .then(() => {
+        alert("클립보드에 복사되었습니다.");
+      })
+      .catch((error) => {
+        console.error("클립보드 복사 오류:", error);
+      });
+  };
+
+  useEffect(() => {
+    const allKeys = Object.keys(localStorage);
+
+    const filteredData = allKeys
+      .filter((key) => key.startsWith("lotto") && key !== "lottoIndex")
+      .map((key) => {
+        return JSON.parse(localStorage.getItem(key) ?? "") as LocationLotto;
+      });
+
+    setDataList((prevData) => [...prevData, ...filteredData]);
+  }, []);
 
   return (
     <>
@@ -27,7 +66,7 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
           <div className="via-transparent relative mb-[2.5rem] flex h-[26.5rem]  flex-col items-center rounded-[1.25rem] bg-gradient-to-br from-[#4B2EFD] to-[#C623FF] p-[1.25rem]">
             <div className="mx-auto mb-[1.44rem]">
               <Image
-                src="/img/logo_white.png"
+                src="/img/logo_white.svg"
                 alt="img"
                 width={113}
                 height={41}
@@ -39,39 +78,31 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
             <div className="mb-[1.12rem] flex h-[12.875rem] items-center justify-center rounded-[1.25rem] bg-black/[.5] px-[1.85rem]">
               <div className="float-left">
                 <div className="mb-1">
-                  <LotteryNumberBall
-                    numbers={[1, 2, 3, 4, 5, 6, 7]}
-                    bonus={true}
-                    checkNum={[]}
-                  />
-                </div>
-                <div className="mb-1">
-                  <LotteryNumberBall
-                    numbers={[1, 2, 3, 4, 5, 6, 7]}
-                    bonus={true}
-                    checkNum={[]}
-                  />
-                </div>
-                <div className="mb-1">
-                  <LotteryNumberBall
-                    numbers={[1, 2, 3, 4, 5, 6, 7]}
-                    bonus={true}
-                    checkNum={[]}
-                  />
-                </div>
-                <div className="mb-1">
-                  <LotteryNumberBall
-                    numbers={[1, 2, 3, 4, 5, 6, 7]}
-                    bonus={true}
-                    checkNum={[]}
-                  />
-                </div>
-                <div className="mb-1">
-                  <LotteryNumberBall
-                    numbers={[1, 2, 3, 4, 5, 6, 7]}
-                    bonus={true}
-                    checkNum={[]}
-                  />
+                  {dataList?.map((item, idx) => {
+                    return (
+                      <>
+                        {item.numbers?.map((num, idx) => {
+                          const numColor = getColorClass(num);
+                          return (
+                            <div
+                              key={idx}
+                              className="relative float-left m-[0.12rem] flex h-[2rem] w-[2rem] items-center justify-center rounded-full"
+                            >
+                              <h1 className="absolute z-10 font-semibold">
+                                {num}
+                              </h1>
+                              <Image
+                                src={`/img/ball_${numColor}.svg`}
+                                alt="img"
+                                width={32}
+                                height={32}
+                              />
+                            </div>
+                          );
+                        })}
+                      </>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -83,11 +114,17 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
             </h3>
             <img src="/img/img_uju.svg" alt="img" className="absolute top-8" />
           </div>
-          <button className="mb-[1rem] w-[100%] rounded-full bg-point py-[0.94rem] font-semibold">
+          <button
+            className="mb-[1rem] w-[100%] rounded-full bg-point py-[0.94rem] font-semibold"
+            onClick={handleCopyToClipboard}
+          >
             번호 복사하기
           </button>
-          <button className="w-[100%] rounded-full bg-white py-[0.94rem] font-semibold text-black">
-            하나 더 뽑기 (1/5)
+          <button
+            className="w-[100%] rounded-full bg-white py-[0.94rem] font-semibold text-black"
+            onClick={() => router.push("/select")}
+          >
+            하나 더 뽑기 ({dataList.length}/5)
           </button>
         </div>
       </main>

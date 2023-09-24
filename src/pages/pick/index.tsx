@@ -111,11 +111,9 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
               alert("번호 6개 모두 선택해주세요");
               return;
             }
-            if (menu == "uju") {
-              // TODO
-              // router.push("이미지 저장 페이지")
-              alert("TODO: 이미지 저장 페이지로 이동");
-            }
+            // if (menu == "uju") {
+            //   alert("TODO: 이미지 저장 페이지로 이동");
+            // }
             if (picks.length < 6) {
               setPicks([
                 ...picks,
@@ -126,12 +124,22 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
               ]);
               return;
             }
-            mutation.mutate({
-              nickname: "뛰어난 기사", // TODO: 닉네임 생성
-              type: menu,
-              numbers: picks,
-            });
+            let lottoIndex = localStorage.getItem("lottoIndex");
+            lottoIndex = lottoIndex ? String(1 + parseInt(lottoIndex)) : "1";
+            localStorage.setItem("lottoIndex", String(lottoIndex));
+            localStorage.setItem(
+              `lotto${lottoIndex}`,
+              JSON.stringify({ type: menu, numbers: picks, time: new Date() }),
+            );
+
+            // localStorage.setItem('numbers',picks )
+            // mutation.mutate({
+            //   nickname: "뛰어난 기사", // TODO: 닉네임 생성
+            //   type: menu,
+            //   numbers: picks,
+            // });
             alert("번호 저장 완료!");
+            router.push("/saved").catch((e)=> console.log(e))
           }}
         ></SubmitButton>
       )}
