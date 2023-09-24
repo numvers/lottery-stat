@@ -7,12 +7,6 @@ export default function Home() {
   const router = useRouter();
 
   const [isDot, setIsDot] = useState(false);
-
-  // 뒤로가기
-  const handleClick = () => {
-    router.back();
-  };
-
   return (
     <>
       <main className="pb-20 sm:w-screen  md:w-[22.5rem]">
@@ -23,7 +17,7 @@ export default function Home() {
             width={10}
             height={20}
             className=" cursor-pointer"
-            onClick={handleClick}
+            onClick={() => router.back()}
           />
         </div>
         <div className="relative grid px-[1.25rem]">
@@ -94,7 +88,7 @@ export default function Home() {
             width={40}
             height={40}
             className=" m-auto my-3 cursor-pointer"
-            onClick={handleClick}
+            onClick={() => router.back()}
           />
           <Image
             src="/img/icon_triangle.svg"
@@ -102,17 +96,20 @@ export default function Home() {
             width={22}
             height={22}
             className="m-auto mb-[-0.5rem] cursor-pointer"
-            onClick={handleClick}
+            onClick={() => router.back()}
           />
-          <button className="m-auto w-[100%] rounded-full bg-gray_3 py-[0.94rem]">
+          <button
+            className="m-auto w-[100%] rounded-full bg-gray_3 py-[0.94rem]"
+            onClick={() => router.push("/select")}
+          >
             한번 더 번호 뽑기
           </button>
-          <div className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 transform rounded-full bg-gray_4 p-[0.6rem]">
-            <button className="px-[1.5rem] text-gray_2">번호 복사</button>
-            <button className="rounded-full bg-point px-[1.5rem] py-[0.56rem]">
-              이미지 저장
-            </button>
-          </div>
+          <button
+            className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 transform rounded-full bg-point p-[0.9rem] sm:w-screen  md:w-[20rem]"
+            onClick={() => router.push("/saved/result")}
+          >
+            이미지 저장
+          </button>
         </div>
       </main>
     </>
