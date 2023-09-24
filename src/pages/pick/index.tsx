@@ -4,17 +4,22 @@ import { useState } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
 import { api } from "../../utils/api";
 
-type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
+export type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
 
 export default function Pick() {
+  return <PickPage firstMenu="pick"></PickPage>;
+}
+
+export function PickPage({ firstMenu }: { firstMenu: menu }) {
   const router = useRouter();
   const mutation = api.lottery.createLottery.useMutation();
-  const [menu, setMenu] = useState<menu>("pick");
+  const [menu, setMenu] = useState<menu>(firstMenu);
   const [picks, setPicks] = useState<number[]>([]);
   const [exclusions, setExclusions] = useState<number[]>([]);
+  const [hover, setHover] = useState(false);
   return (
     <main className="px-[1rem] pb-20 sm:w-screen md:w-[22.5rem]">
-      <div className="flex h-[3.75rem]">
+      <div className="flex h-[3.75rem] ">
         <Image
           src="/img/icon_left_arrow.svg"
           alt="img"
@@ -24,12 +29,18 @@ export default function Pick() {
           onClick={() => router.back()}
         />
       </div>
-      <nav className="align-center mb-[1.25rem] flex h-[2.5rem] gap-[0.37rem] overflow-auto ">
+      <nav className="align-center mb-[1.25rem] flex h-[2.5rem] gap-[0.37rem] overflow-auto scrollbar-hide ">
         <Image
-          src="/img/button_blue_plus.svg"
-          alt="button_blue_plus"
+          src={
+            menu == "pick"
+              ? `/img/button_blue_plus.svg`
+              : `/img/button_gray_4_plus.svg`
+          }
+          alt="img button pick"
           width={0}
           height={0}
+          className="cursor-pointer"
+          onClick={() => setMenu("pick")}
           style={{ width: "2.5rem", height: "2.5rem" }}
         />
         <NavButton activated={menu == "uju"} onClick={() => setMenu("uju")}>
@@ -64,7 +75,7 @@ export default function Pick() {
         }}
       ></hr>
       {menu == "uju" ? (
-        <SpaceBoard></SpaceBoard>
+        <SpaceBoard animate={hover}></SpaceBoard>
       ) : (
         <NumberBoard
           picks={picks}
@@ -91,11 +102,17 @@ export default function Pick() {
         <SubmitButton
           menu={menu}
           numPicks={picks.length}
-          disabled={menu == "pick" && picks.length < 6}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
           onClick={() => {
             if (menu == "pick" && picks.length < 6) {
-              alert("6개가 전부 채워지면 저장가능합니다.");
+              alert("번호 6개 모두 선택해주세요");
               return;
+            }
+            if (menu == "uju") {
+              // TODO
+              // router.push("이미지 저장 페이지")
+              alert("TODO: 이미지 저장 페이지로 이동");
             }
             if (picks.length < 6) {
               setPicks([
@@ -108,6 +125,7 @@ export default function Pick() {
               return;
             }
             mutation.mutate({
+              nickname: "뛰어난 기사", // TODO: 닉네임 생성
               type: menu,
               numbers: picks,
             });
@@ -152,34 +170,49 @@ function navMessageFrom(menu: menu, numPicked: number) {
   }
 }
 
-function numbersFrom(menu: menu, exclusions: number[]) {
+export function numbersFrom(menu: menu, exclusions: number[]) {
   const numLeftRandom = Array.from(Array(45), (_, i) => i + 1)
     .filter((n) => !exclusions.includes(n))
     .map((value) => ({ num: value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ num }) => num);
 
-  const missing = [
-    2, 6, 10, 11, 19, 20, 25, 28, 30, 35, 37, 39, 40, 41, 43, 45,
-  ];
+  const missing = [2, 6, 10, 19, 20, 28, 30, 39, 40, 41, 43, 45];
 
   switch (menu) {
     case "odd-even":
+      let evenLeft = numLeftRandom.filter((v) => v % 2 == 0).length;
+      let oddLeft = numLeftRandom.length - evenLeft;
+      return numLeftRandom.filter((v) => {
+        if (evenLeft >= oddLeft && v % 2 == 0) {
+          evenLeft -= 1;
+          return true;
+        }
+        if (oddLeft > evenLeft && v % 2 == 1) {
+          oddLeft -= 1;
+          return true;
+        }
+        return false;
+      });
     case "missing":
       return numLeftRandom.filter((n) => missing.includes(n));
     case "pick":
     case "uju":
+      const recent = [
+        3, 4, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 25, 26, 27, 29,
+        31, 32, 33, 34, 35, 36, 37, 38, 42, 44,
+      ];
+      return numLeftRandom.filter((v) => recent.includes(v));
     case "random":
       return numLeftRandom;
   }
 }
 
 function SubmitButton(props: SubmitButtonProps) {
-  const disabled = props.disabled;
   return (
     <button
       className={`bg-indigo-600 m-auto flex h-[3.125rem] w-full items-center justify-center rounded-[20px] ${
-        disabled ? "bg-gray_4" : "bg-point"
+        props.menu == "pick" && props.numPicks < 6 ? "bg-gray_4" : "bg-point"
       } text-center`}
       {...props}
     >
@@ -194,7 +227,7 @@ interface SubmitButtonProps extends React.ComponentPropsWithoutRef<"button"> {
 }
 
 function submitMessageFrom(menu: menu, numPicks: number) {
-  if (numPicks == 6) {
+  if (numPicks == 6 && menu != "uju") {
     return `선택완료 ${numPicks}/6`;
   }
   switch (menu) {
@@ -225,7 +258,16 @@ const NumberBoard = ({
 
   return (
     <>
-      <div className="mb-[0.75rem] text-xl">My lotto</div>
+      <div className="mb-[0.75rem] flex h-[1.4375rem] gap-[0.62rem] text-xl">
+        <div className="text-md text-point">My lotto</div>
+        {0 < picks.length && (
+          <div className="inline-flex items-center justify-center gap-2.5 rounded-[1.625rem] bg-point px-[0.5rem] py-[0.13rem]">
+            <div className="font-normal text-center font-['Pretendard'] text-xs">
+              선택한 번호를 다시 눌러서 제거할 수 있어요!
+            </div>
+          </div>
+        )}
+      </div>
       <div className="flex h-[2.5rem] items-center justify-between">
         <div className="flex gap-[0.63rem]">
           {Array.from(Array(6), (_, i) => i).map((i) => {
@@ -299,18 +341,60 @@ const NumberBoard = ({
   );
 };
 
-function SpaceBoard() {
+function SpaceBoard({ animate }: { animate: boolean }) {
   return (
     <div className="mb-[6.63rem]">
-      <Image
-        src="/img/space.svg"
-        alt="button_blue_plus"
-        width={0}
-        height={0}
-        style={{ width: "20.5rem", height: "18.75rem" }}
-      />
+      <div className="relative inline-block">
+        <Image
+          className="display-block max-w-[100%]"
+          src="/img/space/background.svg"
+          alt="button_blue_plus"
+          width={0}
+          height={0}
+          style={{ width: "20.5rem", height: "18.75rem" }}
+        />
+        <Image
+          className={`absolute animate-pulse`}
+          src="/img/space/comet.svg"
+          alt="star"
+          width={0}
+          height={0}
+          style={{
+            top: "6.36rem",
+            right: "6rem",
+            width: "9rem",
+            height: "auto",
+          }}
+        ></Image>
+        <Image
+          className={`absolute ${animate ? "animate-spin-slow" : ""}`}
+          src="/img/space/round-star.svg"
+          alt="star"
+          width={0}
+          height={0}
+          style={{
+            top: "4.12rem",
+            right: "6rem",
+            width: "9rem",
+            height: "auto",
+          }}
+        ></Image>
+        <Image
+          className={`absolute ${animate ? "animate-bounce" : ""}`}
+          src="/img/space/star.svg"
+          alt="star"
+          width={0}
+          height={0}
+          style={{
+            top: "4.12rem",
+            right: "3rem",
+            width: "15rem",
+            height: "auto",
+          }}
+        ></Image>
+      </div>
       <p className="mt-[0.62rem] h-[4.375rem] rounded-[1.25rem] bg-gray_4 px-[1.06rem] py-[1.06rem] text-center text-sm text-gray_2">
-        과거의 로또 추첨 결과와 패턴을 분석한 방식으로,<br></br>각 번호의 출현
+        과거의 로또 추첨 결과와 패턴을 분석한 방식으로<br></br>각 번호의 출현
         빈도를 파악하여 번호를 추첨 해드려요
       </p>
     </div>

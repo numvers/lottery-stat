@@ -3,7 +3,11 @@ import { type Config } from "tailwindcss";
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
+    },
     screens: {
       sm: { max: "26.25rem" }, // 420px
       md: { min: "26.3125rem" }, // 421px

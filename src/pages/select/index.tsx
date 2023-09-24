@@ -47,7 +47,7 @@ export default function Home() {
             <button
               className={`${nowClick === "universe" ? active : disabled} `}
               onMouseEnter={() => setnowClick("universe")}
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/uju")}
             >
               {nowClick === "universe" ? (
                 <>
@@ -67,7 +67,7 @@ export default function Home() {
             <button
               className={`${nowClick === "universe" ? disabled : active} `}
               onMouseEnter={() => setnowClick("direct")}
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/pick")}
             >
               {nowClick === "universe" ? (
                 "직접 생성"
