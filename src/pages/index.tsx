@@ -43,7 +43,9 @@ export default function Home({
           </div>
           {/* 메인 상단 박스 */}
           <div className="mb-[2.5rem]  text-center">
-            <h4 className="mb-[0.25rem] text-xs font-regular">이번주 판매 마감까지</h4>
+            <h4 className="mb-[0.25rem] text-xs font-regular">
+              이번주 판매 마감까지
+            </h4>
             {/* 오늘부터 복권당첨일까지 남은 시간 */}
             <h3 className="flex items-center justify-center pb-[1.25rem] text-base">
               <Image
@@ -67,7 +69,11 @@ export default function Home({
                 {isCardClick ? "닫기" : "등수별 당첨금액"}
               </span>
               <Image
-                src={isCardClick ? "/img/icon_clear.svg" : "/img/icon_gray_plus.svg" }
+                src={
+                  isCardClick
+                    ? "/img/icon_clear.svg"
+                    : "/img/icon_gray_plus.svg"
+                }
                 alt="img"
                 width={18}
                 height={18}
@@ -97,16 +103,9 @@ export function RecentLotteryCardComponent({
           {formatDate(recentData.date)} 추첨
         </h2>
         <div className="mb-[1.25rem] flex  items-center justify-center text-xl font-bold">
-          <h2 className="cursor-pointer">
+          <h2 className="">
             {getEraseFourDigits(recentData.round)}회 당첨결과
           </h2>
-          <Image
-            src="/img/icon_right_arrow.svg"
-            alt="img"
-            width={6.6}
-            height={11.5}
-            className="ml-[1rem] cursor-pointer"
-          />
         </div>
         <LotteryNumberBall
           numbers={recentData.numbers}
