@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import LotteryNumberBall from "~/components/LotteryNumberBall";
 import { formatDate } from "~/module/Util";
 
 export const getColorClass = (item: number) => {
@@ -20,19 +19,41 @@ interface LocationLotto {
 export default function Home() {
   const router = useRouter();
 
-  const [isDot, setIsDot] = useState(false);
+  const [isDot, setIsDot] = useState<number | null>(null);
   const [dataList, setDataList] = useState<LocationLotto[]>([]);
 
-
-  // 클릭 이벤트 핸들러
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(dataList))
+  const handleCopyToClipboard = (item: LocationLotto) => {
+    navigator.clipboard
+      .writeText(JSON.stringify(item.numbers))
       .then(() => {
-        alert('클립보드에 복사되었습니다.');
+        alert("클립보드에 복사되었습니다.");
       })
       .catch((error) => {
-        console.error('클립보드 복사 오류:', error);
+        console.error("클립보드 복사 오류:", error);
       });
+  };
+
+  const handleDeleteItem = (itemToDelete: LocationLotto) => {
+    const itemToDeleteString = JSON.stringify(itemToDelete);
+
+    const allKeys = Object.keys(localStorage);
+
+    allKeys.forEach((key) => {
+      const storedItem = localStorage.getItem(key);
+      if (storedItem === itemToDeleteString) {
+        localStorage.removeItem(key);
+      }
+    });
+
+    setDataList((prevData) => prevData.filter((item) => item !== itemToDelete));
+
+    let lottoIndex = localStorage.getItem("lottoIndex");
+    if (lottoIndex) {
+      lottoIndex = String(parseInt(lottoIndex) - 1);
+      if (parseInt(lottoIndex) >= 1) {
+        localStorage.setItem("lottoIndex", lottoIndex);
+      }
+    }
   };
 
   useEffect(() => {
@@ -60,14 +81,14 @@ export default function Home() {
             onClick={() => router.back()}
           />
         </div>
-        <div className="relative grid px-[1.25rem]">
+        <div className=" grid px-[1.25rem]">
           {dataList?.map((item, idx) => {
             return (
-              <div key={idx}>
+              <div key={idx} className="relative">
                 <div
                   className={
                     item.type === "uju"
-                      ? "gradient-container relative  rounded-[1.25rem] px-[0.3rem] pb-[0.07rem] pt-[0.2rem]"
+                      ? "gradient-container relative  rounded-[1.25rem] px-[0.35rem] pb-[0.05rem] pt-[0.3rem]  mb-[0.37rem]"
                       : ""
                   }
                 >
@@ -95,7 +116,9 @@ export default function Home() {
                       width={22}
                       height={6}
                       className="absolute right-[1.25rem] top-[1.25rem] cursor-pointer"
-                      onClick={() => (isDot ? setIsDot(false) : setIsDot(true))}
+                      onClick={() =>
+                        idx === isDot ? setIsDot(null) : setIsDot(idx)
+                      }
                     />
                     <div className="flex justify-center text-black">
                       {item.numbers?.map((num, idx) => {
@@ -118,14 +141,24 @@ export default function Home() {
                         );
                       })}
                     </div>
-                    {isDot && (
-                      <ul className="absolute right-4 top-[1.87rem] z-50 cursor-pointer rounded-[0.63rem] bg-gray_4 px-[1.5rem] py-[0.6rem]">
-                        <li className="pb-[0.3rem]" onClick={handleCopyToClipboard}>번호 복사</li>
-                        <li className="pt-[0.3rem]">삭제하기</li>
-                      </ul>
-                    )}
                   </div>
                 </div>
+                {idx === isDot && (
+                  <ul className="absolute right-4 top-[1.87rem] z-50 cursor-pointer rounded-[0.63rem] bg-gray_4 px-[1.5rem] py-[0.6rem]">
+                    <li
+                      className="pb-[0.3rem]"
+                      onClick={() => handleCopyToClipboard(item)}
+                    >
+                      번호 복사
+                    </li>
+                    <li
+                      className="pt-[0.3rem]"
+                      onClick={() => handleDeleteItem(item)}
+                    >
+                      삭제하기
+                    </li>
+                  </ul>
+                )}
               </div>
             );
           })}
