@@ -12,6 +12,7 @@ export const lotteryRouter = createTRPCRouter({
   createLottery: publicProcedure
     .input(
       z.object({
+        nickname: z.string().nonempty(),
         numbers: z.number().array().length(6),
         type: z.enum(["pick", "uju", "random", "odd-even", "missing"]),
       }),
@@ -25,7 +26,7 @@ export const lotteryRouter = createTRPCRouter({
         forth: input.numbers[3],
         fifth: input.numbers[4],
         sixth: input.numbers[5],
-        created_at: new Date(),
+        nickname: input.nickname,
       });
       return ctx.db.insert(lotteryStatLotteries).values(data);
     }),
