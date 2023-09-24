@@ -363,27 +363,27 @@ function SpaceBoard({ animate }: { animate: boolean }) {
           style={{ width: "20.5rem", height: "18.75rem" }}
         />
         <Image
-          className={`absolute animate-pulse`}
+          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform animate-pulse`}
           src="/img/space/comet.svg"
           alt="star"
           width={0}
           height={0}
           style={{
-            top: "6.36rem",
-            right: "7rem",
             width: "9rem",
             height: "auto",
           }}
         ></Image>
         <Image
-          className={`absolute ${animate ? "animate-spin-slow" : ""}`}
+          className={`absolute ${
+            animate ? "animate-spin-slow" : ""
+          } left-1/7 top-1/2 `}
           src="/img/space/round-star.svg"
           alt="star"
           width={0}
           height={0}
           style={{
-            top: "4.12rem",
-            right: "7rem",
+            top: "3.8rem",
+            right: "5.75rem",
             width: "9rem",
             height: "auto",
           }}
