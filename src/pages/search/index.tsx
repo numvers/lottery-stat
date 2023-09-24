@@ -254,7 +254,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               </div>
             </div>
             {isMultiCheck && (
-              <div className="absolute z-40 mt-[0.63rem] ">
+              <div className="absolute z-[99] mt-[0.63rem] ">
                 <NumberBoard
                   checkNum={checkNum}
                   setCheckNum={setCheckNum}
@@ -307,7 +307,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                 />
               </button>
               {isRoundClick && (
-                <ul className="absolute top-[2.4rem] z-20 mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem] scrollbar-hide">
+                <ul className="absolute top-[2.4rem] z-[99] mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem] scrollbar-hide">
                   {allData?.map((item, idx) => {
                     return (
                       <button
