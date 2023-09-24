@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
 export default function NavBar() {
   const router = useRouter();
@@ -29,25 +28,6 @@ export default function NavBar() {
     },
   ];
 
-  const [activeTap, setActiveTap] = useState(1);
-  const clickHandler = (idx: number) => {
-    setActiveTap(idx);
-  };
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setActiveTap(
-        navMenu.findIndex((menu) => menu.path === window.location.pathname),
-      );
-
-      if (window.location.pathname === "/select/list") {
-        setActiveTap(2);
-      } else if (window.location.pathname === "/saved/result") {
-        setActiveTap(3);
-      }
-    }
-  }, [router]);
-
   return (
     <nav>
       <div className="fixed bottom-0 z-50 h-[4.375rem] rounded-t-[1.25rem] bg-black/[.6] backdrop-blur-[0.625rem] sm:w-screen md:w-[22.5rem]">
@@ -57,9 +37,10 @@ export default function NavBar() {
               <Link key={idx} href={menu.path}>
                 <li
                   className={`float-left grid h-[3.125rem] w-[25%] cursor-pointer place-items-center text-xs ${
-                    activeTap === idx ? "text-white" : "text-white/[.5]"
+                    router.pathname.endsWith(menu.path)
+                      ? "text-white"
+                      : "text-white/[.5]"
                   }`}
-                  onClick={() => clickHandler(idx)}
                 >
                   <Image
                     src={menu.img}
@@ -67,7 +48,9 @@ export default function NavBar() {
                     width={20}
                     height={23}
                     className={`${
-                      activeTap === idx ? "opacity-100" : "opacity-50"
+                      router.pathname.endsWith(menu.path)
+                        ? "opacity-100"
+                        : "opacity-50"
                     }`}
                   />
                   {menu.name}
