@@ -112,7 +112,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   const getDetailData = async () => {
     try {
       const response = await fetch(
-        `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParamsArray(
+        `https://lottery-stat.fly.dev/lotteries?${getIncludeParamsArray(
           searchKeyword,
         )}`,
       );
@@ -172,7 +172,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
+          `https://lottery-stat.fly.dev/lotteries?${getIncludeParams(
             checkNum as number[],
           )}`,
         );
@@ -417,9 +417,7 @@ export async function getServerSideProps(props: GetServerSidePropsContext) {
     "public, s-maxage=3600, stale-while-revalidate=3600",
   );
   // 전체 당첨번호 조회
-  const allResponse = await fetch(
-    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
-  );
+  const allResponse = await fetch("https://lottery-stat.fly.dev/lotteries");
 
   const allData = (await allResponse.json()) as LotteryResult;
   return {

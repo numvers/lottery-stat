@@ -51,7 +51,7 @@ export default function NumberBoard({
       return;
     } else {
       const response = await fetch(
-        `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
+        `https://lottery-stat.fly.dev/lotteries?${getIncludeParams(
           checkNum as number[],
         )}`,
       );
