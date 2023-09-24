@@ -310,7 +310,10 @@ const NumberBoard = ({
             <NumberBall
               key={number}
               number={number}
-              disabled={picks.includes(number)}
+              disabled={
+                picks.includes(number) ||
+                (exclusions.includes(number) && !isExcluding)
+              }
               picked={picks.includes(number)}
               excluded={exclusions.includes(number)}
               onClick={() => {
@@ -322,7 +325,11 @@ const NumberBoard = ({
                   addExclusions(number);
                   return;
                 }
-                addPicks(number);
+                if (picks.length < 6) {
+                  addPicks(number);
+                } else {
+                  alert("번호는 최대 6개까지만 선택할 수 있습니다");
+                }
                 console.log(`picking ${number} for ${picks.toString()}`);
               }}
             ></NumberBall>
