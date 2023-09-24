@@ -32,6 +32,10 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
       .writeText(JSON.stringify(dataList))
       .then(() => {
         alert("클립보드에 복사되었습니다.");
+        localStorage.clear();
+        router.push("/select").catch((e) => {
+          console.log(e);
+        });
       })
       .catch((error) => {
         console.error("클립보드 복사 오류:", error);

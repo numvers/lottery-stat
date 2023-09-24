@@ -125,21 +125,31 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
               return;
             }
             let lottoIndex = localStorage.getItem("lottoIndex");
-            lottoIndex = lottoIndex ? String(1 + parseInt(lottoIndex)) : "1";
-            localStorage.setItem("lottoIndex", String(lottoIndex));
-            localStorage.setItem(
-              `lotto${lottoIndex}`,
-              JSON.stringify({ type: menu, numbers: picks, time: new Date() }),
-            );
+            if (lottoIndex && parseInt(lottoIndex) >= 5) {
+              alert("이미 5개의 로또를 저장하셨습니다.");
+            } else {
+              // 5개 미만인 경우 새로운 로또 저장
+              lottoIndex = lottoIndex ? String(1 + parseInt(lottoIndex)) : "1";
+              localStorage.setItem("lottoIndex", String(lottoIndex));
+              localStorage.setItem(
+                `lotto${lottoIndex}`,
+                JSON.stringify({
+                  type: menu,
+                  numbers: picks,
+                  time: new Date(),
+                }),
+              );
 
+              alert("번호 저장 완료!");
+            }
+
+            router.push("/saved").catch((e) => console.log(e));
             // localStorage.setItem('numbers',picks )
             // mutation.mutate({
             //   nickname: "뛰어난 기사", // TODO: 닉네임 생성
             //   type: menu,
             //   numbers: picks,
             // });
-            alert("번호 저장 완료!");
-            router.push("/saved").catch((e)=> console.log(e))
           }}
         ></SubmitButton>
       )}
