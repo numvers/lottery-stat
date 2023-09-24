@@ -4,13 +4,24 @@ import { useState } from "react";
 import { getColorClass } from "../../components/LotteryNumberBall";
 import { api } from "../../utils/api";
 
-export type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
-
-export default function Pick() {
-  return <PickPage firstMenu="pick"></PickPage>;
+interface nicknameResult {
+  words: string[];
+  seed: string;
 }
 
-export function PickPage({ firstMenu }: { firstMenu: menu }) {
+export type menu = "pick" | "uju" | "random" | "missing" | "odd-even";
+
+export default function Pick({nickname} : {nickname :nicknameResult}) {
+  return <PickPage firstMenu="pick" nickname={nickname}></PickPage>;
+}
+
+export function PickPage({
+  firstMenu,
+  nickname,
+}: {
+  firstMenu: menu;
+  nickname: nicknameResult;
+}) {
   const router = useRouter();
   const mutation = api.lottery.createLottery.useMutation();
   const [menu, setMenu] = useState<menu>(firstMenu);
@@ -112,9 +123,11 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
               return;
             }
             if (menu == "uju") {
-              // TODO
-              // router.push("이미지 저장 페이지")
+              router.push("/saved").catch((e)=> {
+                console.log(e)
+              });
               alert("TODO: 이미지 저장 페이지로 이동");
+              return;
             }
             if (picks.length < 6) {
               setPicks([
@@ -126,8 +139,8 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
               ]);
               return;
             }
-            mutation.mutate({
-              nickname: "뛰어난 기사", // TODO: 닉네임 생성
+           mutation.mutate({
+              nickname: String(nickname.words),
               type: menu,
               numbers: picks,
             });
@@ -460,4 +473,17 @@ interface NumberBallProps extends React.ComponentPropsWithoutRef<"button"> {
   number: number;
   picked: boolean;
   excluded: boolean;
+}
+
+export async function getServerSideProps() {
+  const response = await fetch(
+    "https://nickname.hwanmoo.kr/?format=json&count=1&max_length=8",
+  );
+  const nickname = (await response.json()) as nicknameResult;
+
+  return {
+    props: {
+      nickname,
+    },
+  };
 }
