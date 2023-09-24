@@ -1,3 +1,4 @@
+import { desc } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { lotteryStatLotteries } from "../../db/schema";
@@ -7,7 +8,9 @@ export const insertLotterySchema = createInsertSchema(lotteryStatLotteries);
 
 export const lotteryRouter = createTRPCRouter({
   findLottery: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.lotteryStatLotteries.findMany();
+    return ctx.db.query.lotteryStatLotteries.findMany({
+      orderBy: [desc(lotteryStatLotteries.createdAt)],
+    });
   }),
   createLottery: publicProcedure
     .input(

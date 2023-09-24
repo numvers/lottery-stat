@@ -110,12 +110,15 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
 
   // 번호 검색으로 로또 정보 얻기 핸들러
   const getDetailData = async () => {
+    // searchKeyword -> number[]
     try {
+      // <- - >...
       const response = await fetch(
         `https://lottery-stat.fly.dev/lotteries?${getIncludeParamsArray(
           searchKeyword,
         )}`,
       );
+      // <- - >... json
       const result = (await response.json()) as LotteryResult[];
       setData(result);
     } catch (error) {
