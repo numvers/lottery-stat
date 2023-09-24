@@ -102,6 +102,8 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
         <SubmitButton
           menu={menu}
           numPicks={picks.length}
+          onTouchStart={() => setHover(true)}
+          onTouchEnd={() => setHover(false)}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           onClick={() => {
@@ -308,7 +310,10 @@ const NumberBoard = ({
             <NumberBall
               key={number}
               number={number}
-              disabled={picks.includes(number)}
+              disabled={
+                picks.includes(number) ||
+                (exclusions.includes(number) && !isExcluding)
+              }
               picked={picks.includes(number)}
               excluded={exclusions.includes(number)}
               onClick={() => {
@@ -320,7 +325,11 @@ const NumberBoard = ({
                   addExclusions(number);
                   return;
                 }
-                addPicks(number);
+                if (picks.length < 6) {
+                  addPicks(number);
+                } else {
+                  alert("번호는 최대 6개까지만 선택할 수 있습니다");
+                }
                 console.log(`picking ${number} for ${picks.toString()}`);
               }}
             ></NumberBall>
@@ -343,8 +352,8 @@ const NumberBoard = ({
 
 function SpaceBoard({ animate }: { animate: boolean }) {
   return (
-    <div className="mb-[6.63rem]">
-      <div className="relative inline-block">
+    <div className="mx-auto mb-[6.63rem]">
+      <div className="relative mx-auto flex justify-center">
         <Image
           className="display-block max-w-[100%]"
           src="/img/space/background.svg"
@@ -361,7 +370,7 @@ function SpaceBoard({ animate }: { animate: boolean }) {
           height={0}
           style={{
             top: "6.36rem",
-            right: "6rem",
+            right: "7rem",
             width: "9rem",
             height: "auto",
           }}
@@ -374,7 +383,7 @@ function SpaceBoard({ animate }: { animate: boolean }) {
           height={0}
           style={{
             top: "4.12rem",
-            right: "6rem",
+            right: "7rem",
             width: "9rem",
             height: "auto",
           }}
@@ -387,14 +396,14 @@ function SpaceBoard({ animate }: { animate: boolean }) {
           height={0}
           style={{
             top: "4.12rem",
-            right: "3rem",
+            right: "3.5rem",
             width: "15rem",
             height: "auto",
           }}
         ></Image>
       </div>
-      <p className="mt-[0.62rem] h-[4.375rem] rounded-[1.25rem] bg-gray_4 px-[1.06rem] py-[1.06rem] text-center text-sm text-gray_2">
-        과거의 로또 추첨 결과와 패턴을 분석한 방식으로<br></br>각 번호의 출현
+      <p className="mt-[0.62rem] h-[4.375rem] rounded-[1.25rem] bg-gray_4 px-[1.06rem] py-[1.06rem] text-center text-sm leading-[1.1375rem] text-gray_2">
+        과거의 로또 추첨 결과와 패턴을 분석한 방식으로,<br></br>각 번호의 출현
         빈도를 파악하여 번호를 추첨 해드려요
       </p>
     </div>
