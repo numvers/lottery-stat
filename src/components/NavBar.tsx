@@ -15,7 +15,7 @@ export default function NavBar() {
     {
       name: "번호 검색",
       path: "/search",
-      img: "/img/icon_search.svg",
+      img: "/img/icon_nav_search.svg",
     },
     {
       name: "번호 뽑기",
@@ -42,6 +42,8 @@ export default function NavBar() {
 
       if (window.location.pathname === "/select/list") {
         setActiveTap(2);
+      } else if (window.location.pathname === "/saved/result") {
+        setActiveTap(3);
       }
     }
   }, [router]);
