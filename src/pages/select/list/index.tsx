@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import LotteryNumberBallSmall from "~/components/LotteryNumberBallSmall";
+import UserLottery from "../../../components/UserLottery";
+import { api } from "../../../utils/api";
 
 export default function List() {
   const router = useRouter();
+  const query = api.lottery.findLottery.useQuery();
 
   // 스크롤 상태 state
   const [isScroll, setIsScroll] = useState(false);
@@ -51,30 +53,19 @@ export default function List() {
           />
         </div>
         <div className="relative px-[1.25rem]">
-          <div className="mb-[0.37rem] rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] p-[0.15rem]">
-            <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
-              <div>
-                <h2 className="font-semibold">능이버섯</h2>
-                <span className="text-xs">23.09.12</span>
-              </div>
-              <LotteryNumberBallSmall
-                numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={true}
-              />
-            </div>
-          </div>
-          <div className="mb-[0.37rem] rounded-[1.25rem]">
-            <div className="flex items-center justify-between rounded-[1.25rem] bg-gray_4 px-[1.25rem] py-[0.87rem]">
-              <div>
-                <h2 className="font-semibold">능이버섯</h2>
-                <span className="text-xs">23.09.12</span>
-              </div>
-              <LotteryNumberBallSmall
-                numbers={[1, 2, 3, 4, 5, 6, 7]}
-                bonus={true}
-              />
-            </div>
-          </div>
+          <h1 className="mb-[1.25rem] flex items-center justify-between text-[1.375rem] font-semibold">
+            실시간 우주 생성 번호
+          </h1>
+          {query.data?.map((v, i) => (
+            <UserLottery
+              key={i}
+              numbers={[v.first, v.second, v.third, v.forth, v.fifth, v.sixth]}
+              bonus={false}
+              menu={v.type}
+              created_at={v.createdAt}
+              nickname={v.nickname}
+            ></UserLottery>
+          ))}
           {isScroll && (
             <button
               className="sticky bottom-20 z-50 float-right

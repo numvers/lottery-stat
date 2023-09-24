@@ -2,7 +2,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 
-export default function Home() {
+interface nicknameResult {
+  words: string[];
+  seed: string;
+}
+
+export default function Home({ nickname }: { nickname: nicknameResult }) {
   const router = useRouter();
 
   return (
@@ -71,7 +76,7 @@ export default function Home() {
               </div>
             </div>
             <h1 className="mb-[0.62rem] w-[12rem] rounded-full bg-white/[.2] px-[2.19rem] py-[0.62rem] text-center font-bold">
-              운이좋은 참새구리
+              {nickname.words}
             </h1>
             <h3 className="text-xs">
               우주의 기운으로 추천된 오늘의 닉네임이에요.
@@ -88,4 +93,17 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const response = await fetch(
+    "https://nickname.hwanmoo.kr/?format=json&count=1&max_length=8",
+  );
+  const nickname = (await response.json()) as nicknameResult;
+
+  return {
+    props: {
+      nickname,
+    },
+  };
 }

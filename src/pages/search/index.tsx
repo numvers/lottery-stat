@@ -1,7 +1,8 @@
+import { GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import LotteryDetailModal from "~/components/LotteryDetailModal";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import NumberBoard from "~/components/NumberBoard";
@@ -216,7 +217,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               onChange={searchHandler}
             />
             <Image
-              src={`${searchKeyword.length > 0 ? '/img/icon_search.svg' : '/img/icon_search_trans.svg'}`}
+              src={`${
+                searchKeyword.length > 0
+                  ? "/img/icon_search.svg"
+                  : "/img/icon_search_trans.svg"
+              }`}
               alt="img"
               width={20}
               height={20}
@@ -254,7 +259,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               </div>
             </div>
             {isMultiCheck && (
-              <div className="absolute z-40 mt-[0.63rem] ">
+              <div className="absolute z-[99] mt-[0.63rem] ">
                 <NumberBoard
                   checkNum={checkNum}
                   setCheckNum={setCheckNum}
@@ -307,7 +312,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
                 />
               </button>
               {isRoundClick && (
-                <ul className="absolute top-[2.4rem] z-20 mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem] scrollbar-hide">
+                <ul className="absolute top-[2.4rem] z-[99] mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem] scrollbar-hide">
                   {allData?.map((item, idx) => {
                     return (
                       <button
@@ -406,7 +411,11 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(props: GetServerSidePropsContext) {
+  props.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=3600, stale-while-revalidate=3600",
+  );
   // 전체 당첨번호 조회
   const allResponse = await fetch(
     "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
