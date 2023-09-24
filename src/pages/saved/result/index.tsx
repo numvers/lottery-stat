@@ -25,6 +25,18 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
 
   const [dataList, setDataList] = useState<LocationLotto[]>([]);
 
+  // 클릭 이벤트 핸들러
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(JSON.stringify(dataList))
+      .then(() => {
+        alert("클립보드에 복사되었습니다.");
+      })
+      .catch((error) => {
+        console.error("클립보드 복사 오류:", error);
+      });
+  };
+
   useEffect(() => {
     const allKeys = Object.keys(localStorage);
 
@@ -102,7 +114,10 @@ export default function Home({ nickname }: { nickname: nicknameResult }) {
             </h3>
             <img src="/img/img_uju.svg" alt="img" className="absolute top-8" />
           </div>
-          <button className="mb-[1rem] w-[100%] rounded-full bg-point py-[0.94rem] font-semibold">
+          <button
+            className="mb-[1rem] w-[100%] rounded-full bg-point py-[0.94rem] font-semibold"
+            onClick={handleCopyToClipboard}
+          >
             번호 복사하기
           </button>
           <button

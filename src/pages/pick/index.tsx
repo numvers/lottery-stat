@@ -111,9 +111,9 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
               alert("번호 6개 모두 선택해주세요");
               return;
             }
-            if (menu == "uju") {
-              alert("TODO: 이미지 저장 페이지로 이동");
-            }
+            // if (menu == "uju") {
+            //   alert("TODO: 이미지 저장 페이지로 이동");
+            // }
             if (picks.length < 6) {
               setPicks([
                 ...picks,
@@ -139,7 +139,7 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
             //   numbers: picks,
             // });
             alert("번호 저장 완료!");
-            // router.push("/saved").catch((e)=> console.log(e))
+            router.push("/saved").catch((e)=> console.log(e))
           }}
         ></SubmitButton>
       )}
