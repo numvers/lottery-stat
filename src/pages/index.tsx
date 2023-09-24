@@ -43,8 +43,9 @@ export default function Home({
           </div>
           {/* 메인 상단 박스 */}
           <div className="mb-[2.5rem]  text-center">
+            <h4 className="mb-[0.25rem] text-xs font-regular">이번주 판매 마감까지</h4>
             {/* 오늘부터 복권당첨일까지 남은 시간 */}
-            <h3 className="flex items-center justify-center py-[1.25rem] text-base">
+            <h3 className="flex items-center justify-center pb-[1.25rem] text-base">
               <Image
                 src="/img/icon_clock.svg"
                 alt="img"
@@ -66,7 +67,7 @@ export default function Home({
                 {isCardClick ? "닫기" : "등수별 당첨금액"}
               </span>
               <Image
-                src="/img/icon_clear.svg"
+                src={isCardClick ? "/img/icon_clear.svg" : "/img/icon_gray_plus.svg" }
                 alt="img"
                 width={18}
                 height={18}

@@ -19,7 +19,7 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
   const [hover, setHover] = useState(false);
   return (
     <main className="px-[1rem] pb-20 sm:w-screen md:w-[22.5rem]">
-      <div className="flex h-[3.75rem]">
+      <div className="flex h-[3.75rem] ">
         <Image
           src="/img/icon_left_arrow.svg"
           alt="img"
@@ -29,7 +29,7 @@ export function PickPage({ firstMenu }: { firstMenu: menu }) {
           onClick={() => router.back()}
         />
       </div>
-      <nav className="align-center mb-[1.25rem] flex h-[2.5rem] gap-[0.37rem] overflow-auto ">
+      <nav className="align-center mb-[1.25rem] flex h-[2.5rem] gap-[0.37rem] overflow-auto scrollbar-hide ">
         <Image
           src={
             menu == "pick"
