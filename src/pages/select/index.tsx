@@ -24,7 +24,7 @@ export default function Home() {
       <main className="pb-20 sm:w-screen  md:w-[22.5rem]">
         <div className="relative w-[100%] px-[1.25rem]">
           <div className="flex h-[3.75rem] items-center">
-            <Image src="/img/logo.png" alt="img" width={82} height={30} />
+            <Image src="/img/logo.svg" alt="img" width={82} height={30} />
           </div>
           <Swiper
             className="ten-swiper"

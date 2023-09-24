@@ -39,7 +39,7 @@ export default function Home({
       <main className="sm:w-screen md:w-[22.5rem] ">
         <div className="px-[1.25rem]">
           <div className="flex h-[3.75rem] items-center">
-            <Image src="/img/logo.png" alt="img" width={82} height={30} />
+            <Image src="/img/logo.svg" alt="img" width={82} height={30} />
           </div>
           {/* 메인 상단 박스 */}
           <div className="mb-[2.5rem]  text-center">

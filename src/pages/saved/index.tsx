@@ -1,12 +1,40 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
+import { formatDate } from "~/module/Util";
+
+export const getColorClass = (item: number) => {
+  if (item <= 10) return "yellow";
+  if (item <= 20) return "blue";
+  if (item <= 30) return "red";
+  if (item <= 40) return "black";
+  return "green";
+};
+interface LocationLotto {
+  type: string;
+  numbers: number[];
+  time: string;
+}
 
 export default function Home() {
   const router = useRouter();
 
   const [isDot, setIsDot] = useState(false);
+  const [dataList, setDataList] = useState<LocationLotto[]>([]);
+
+  useEffect(() => {
+    const allKeys = Object.keys(localStorage);
+
+    const filteredData = allKeys
+      .filter((key) => key.startsWith("lotto") && key !== "lottoIndex")
+      .map((key) => {
+        return JSON.parse(localStorage.getItem(key) ?? "") as LocationLotto;
+      });
+
+    setDataList((prevData) => [...prevData, ...filteredData]);
+  }, []);
+
   return (
     <>
       <main className="pb-20 sm:w-screen  md:w-[22.5rem]">
@@ -21,33 +49,56 @@ export default function Home() {
           />
         </div>
         <div className="relative grid px-[1.25rem]">
-          <div className="relative mb-[0.37rem] rounded-[1.25rem] bg-gray_1 p-[1.25rem]">
-            <div className="mb-[0.87rem]">
-              <h1 className="mb-1 flex  justify-between text-xl font-bold text-point">
-                1번 로또
-              </h1>
-              <span className="text-sm text-gray_3">23년 09월 16일 생성</span>
-            </div>
-            <Image
-              src="/img/icon_dot_black.svg"
-              alt="img"
-              width={22}
-              height={6}
-              className="absolute right-[1.25rem] top-[1.25rem] cursor-pointer"
-              onClick={() => (isDot ? setIsDot(false) : setIsDot(true))}
-            />
-            <LotteryNumberBall
-              numbers={[1, 2, 3, 4, 5, 6, 7]}
-              bonus={true}
-              checkNum={[]}
-            />
-            {isDot && (
-              <ul className="absolute right-4 top-[1.87rem] z-50 cursor-pointer rounded-[0.63rem] bg-gray_4 px-[1.5rem] py-[0.6rem]">
-                <li className="pb-[0.3rem] ">번호 복사</li>
-                <li className="pt-[0.3rem]">삭제하기</li>
-              </ul>
-            )}
-          </div>
+          {dataList?.map((item, idx) => {
+            return (
+              <div key={idx}>
+                <div className="relative mb-[0.37rem] rounded-[1.25rem] bg-gray_1 p-[1.25rem]">
+                  <div className="mb-[0.87rem]">
+                    <h1 className="mb-1 flex  justify-between text-xl font-bold text-point">
+                      {idx + 1}번 로또
+                    </h1>
+                    <span className="text-sm text-gray_3">
+                      {formatDate(item.time)} 생성
+                    </span>
+                  </div>
+                  <Image
+                    src="/img/icon_dot_black.svg"
+                    alt="img"
+                    width={22}
+                    height={6}
+                    className="absolute right-[1.25rem] top-[1.25rem] cursor-pointer"
+                    onClick={() => (isDot ? setIsDot(false) : setIsDot(true))}
+                  />
+                  <div className="flex justify-center text-black">
+                    {item.numbers?.map((num, idx) => {
+                      const numColor = getColorClass(num);
+                      return (
+                        <div
+                          key={idx}
+                          className="relative float-left mx-[0.1875rem] flex h-[2rem] w-[2rem] items-center justify-center rounded-full"
+                        >
+                          <h1 className="absolute z-10 font-semibold">{num}</h1>
+                          <Image
+                            src={`/img/ball_${numColor}.svg`}
+                            alt="img"
+                            width={32}
+                            height={32}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {isDot && (
+                    <ul className="absolute right-4 top-[1.87rem] z-50 cursor-pointer rounded-[0.63rem] bg-gray_4 px-[1.5rem] py-[0.6rem]">
+                      <li className="pb-[0.3rem] ">번호 복사</li>
+                      <li className="pt-[0.3rem]">삭제하기</li>
+                    </ul>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          {/* 
           <div className="gradient-container relative mb-[0.37rem] rounded-[1.25rem] p-[1.25rem]">
             <div className="mb-[0.87rem]">
               <h1 className="mb-1 flex items-center  text-xl font-bold text-white">
@@ -81,7 +132,7 @@ export default function Home() {
                 <li className="pt-[0.3rem]">삭제하기</li>
               </ul>
             )}
-          </div>
+          </div> */}
           <Image
             src="/img/img_round_plus.svg"
             alt="img"
