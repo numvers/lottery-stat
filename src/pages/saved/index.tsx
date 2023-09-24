@@ -88,59 +88,67 @@ export default function Home() {
                 <div
                   className={
                     item.type === "uju"
-                      ? "gradient-container relative  rounded-[1.25rem] px-[0.35rem] pb-[0.05rem] pt-[0.3rem]  mb-[0.37rem]"
-                      : ""
+                      ? "gradient-container relative mb-[0.37rem] rounded-[1.25rem] bg-gray_1 p-[1.25rem] "
+                      : "relative mb-[0.37rem] rounded-[1.25rem] bg-gray_1 p-[1.25rem] "
                   }
                 >
-                  <div className="relative mb-[0.37rem] rounded-[1.25rem] bg-gray_1 p-[1.25rem] ">
-                    <div className="mb-[0.87rem]">
-                      <h1 className="mb-1 flex   text-xl font-bold text-point">
-                        {idx + 1}번 로또
-                        {item.type === "uju" && (
+                  <div className="mb-[0.87rem]">
+                    <h1
+                      className={`mb-1 flex text-xl font-bold  ${
+                        item.type === "uju" ? "text-white" : "text-point"
+                      }`}
+                    >
+                      {idx + 1}번 로또
+                      {item.type === "uju" && (
+                        <Image
+                          src="/img/icon_spaceship_bright.svg"
+                          alt="img"
+                          width={39}
+                          height={21}
+                          className="ml-1"
+                        />
+                      )}
+                    </h1>
+                    <span
+                      className={`text-sm ${
+                        item.type === "uju" ? "text-white" : "text-gray_3"
+                      }`}
+                    >
+                      {formatDate(item.time)} 생성
+                    </span>
+                  </div>
+                  <Image
+                    src={
+                      item.type === "uju"
+                        ? "/img/icon_dot_white.svg"
+                        : "/img/icon_dot_black.svg"
+                    }
+                    alt="img"
+                    width={22}
+                    height={6}
+                    className="absolute right-[1.25rem] top-[1.25rem] cursor-pointer"
+                    onClick={() =>
+                      idx === isDot ? setIsDot(null) : setIsDot(idx)
+                    }
+                  />
+                  <div className="flex justify-center text-black">
+                    {item.numbers?.map((num, idx) => {
+                      const numColor = getColorClass(num);
+                      return (
+                        <div
+                          key={idx}
+                          className="relative float-left mx-[0.1875rem] flex h-[2rem] w-[2rem] items-center justify-center rounded-full"
+                        >
+                          <h1 className="absolute z-10 font-semibold">{num}</h1>
                           <Image
-                            src="/img/icon_spaceship_bright.svg"
+                            src={`/img/ball_${numColor}.svg`}
                             alt="img"
-                            width={39}
-                            height={21}
-                            className="ml-1"
+                            width={32}
+                            height={32}
                           />
-                        )}
-                      </h1>
-                      <span className="text-sm text-gray_3">
-                        {formatDate(item.time)} 생성
-                      </span>
-                    </div>
-                    <Image
-                      src="/img/icon_dot_black.svg"
-                      alt="img"
-                      width={22}
-                      height={6}
-                      className="absolute right-[1.25rem] top-[1.25rem] cursor-pointer"
-                      onClick={() =>
-                        idx === isDot ? setIsDot(null) : setIsDot(idx)
-                      }
-                    />
-                    <div className="flex justify-center text-black">
-                      {item.numbers?.map((num, idx) => {
-                        const numColor = getColorClass(num);
-                        return (
-                          <div
-                            key={idx}
-                            className="relative float-left mx-[0.1875rem] flex h-[2rem] w-[2rem] items-center justify-center rounded-full"
-                          >
-                            <h1 className="absolute z-10 font-semibold">
-                              {num}
-                            </h1>
-                            <Image
-                              src={`/img/ball_${numColor}.svg`}
-                              alt="img"
-                              width={32}
-                              height={32}
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
                 {idx === isDot && (
