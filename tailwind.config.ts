@@ -42,6 +42,7 @@ export default {
       red: "#FF2323",
       light_black: "#1C1919",
       green: "#62EB5E",
+      purple: "#6D2BFE",
       gray_1: "#F3F3F9",
       gray_2: "#D7D7D7",
       gray_3: "#636262",

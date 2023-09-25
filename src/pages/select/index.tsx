@@ -99,16 +99,31 @@ export default function Home() {
               모두보기
             </span>
           </h1>
-          {query.data?.map((v, i) => (
-            <UserLottery
-              key={i}
-              numbers={[v.first, v.second, v.third, v.forth, v.fifth, v.sixth]}
-              bonus={false}
-              menu={v.type}
-              created_at={v.createdAt}
-              nickname={v.nickname}
-            ></UserLottery>
-          ))}
+          {query.data
+            ?.slice(0, 5)
+            .map((v, i) => (
+              <UserLottery
+                key={i}
+                numbers={[
+                  v.first,
+                  v.second,
+                  v.third,
+                  v.forth,
+                  v.fifth,
+                  v.sixth,
+                ]}
+                bonus={false}
+                menu={v.type}
+                created_at={v.createdAt}
+                nickname={v.nickname}
+              />
+            ))}
+          <h3
+            className="mt-4 text-center cursor-pointer"
+            onClick={() => router.push("/select/list")}
+          >
+            더보기
+          </h3>
         </div>
       </main>
     </>
@@ -118,26 +133,35 @@ export default function Home() {
 export function TitleCard_1() {
   return (
     <>
-      <div className="mb-[0.63rem] h-[13rem] rounded-[1.25rem] bg-[#E2DFFB] p-[1.25rem] text-black">
+      <div className="bg-purple relative mb-[0.63rem] h-[13rem] rounded-[1.25rem] p-[1.25rem] text-white">
         <div className="mb-[0.5rem] flex justify-between">
-          <h1 className="text-xxl font-bold text-point">우주 Pick! 행운넘버</h1>
-          <h3 className="font-xs rounded-full bg-point/[.2] px-[0.75rem] py-[0.12rem] font-semibold leading-[1.25rem] text-point ">
+          <h1 className="flex items-center  text-xl font-semibold">
+            우주 Pick!
+            <Image
+              src="/img/icon_spaceship_bright.svg"
+              alt="img"
+              width={36}
+              height={20}
+              className="ml-1"
+            />
+          </h1>
+          <h3 className="font-xs rounded-full bg-white/[.7] px-[0.75rem] py-[0.12rem] font-semibold leading-[1.4rem] text-point ">
             1/2
           </h3>
         </div>
-        <span className="text-sm font-semibold">우추추천이란?</span>
-        <div className="flex justify-center">
-          <Image
-            src="/img/img_ball_com_1.svg"
-            alt="img"
-            width={250}
-            height={0}
-            className="py-[0.94rem]"
-          />
-        </div>
-        <h3 className="text-center text-[0.75rem]">
-          <b>당첨번호</b>와 <b>선호 번호 생성 데이터</b>에 기반한 서비스입니다.
-        </h3>
+        <span className="text-xs font-regular leading-5">
+          <b className="font-bold">당첨번호</b>와{" "}
+          <b className="font-bold">선호 번호 생성 데이터</b>에
+          <br />
+          기반한 서비스입니다.
+        </span>
+        <Image
+          src="/img/img_ball_com_1.svg"
+          alt="img"
+          width={250}
+          height={0}
+          className="absolute bottom-8 left-8"
+        />
       </div>
     </>
   );
@@ -146,28 +170,25 @@ export function TitleCard_1() {
 export function TitleCard_2() {
   return (
     <>
-      <div className="mb-[0.63rem] h-[13rem] rounded-[1.25rem] bg-[#E2DFFB] p-[1.25rem] text-black">
+      <div className="bg-purple relative mb-[0.63rem] h-[13rem] rounded-[1.25rem] p-[1.25rem] text-white">
         <div className="mb-[0.5rem] flex justify-between">
-          <h1 className="text-xxl font-bold text-point">My lotto! </h1>
-          <h3 className="font-xs rounded-full bg-point/[.2] px-[0.75rem] py-[0.12rem] font-semibold leading-[1.25rem] text-point ">
+          <h1 className="flex items-center  text-xl font-semibold">
+            My lotto!
+          </h1>
+          <h3 className="font-xs rounded-full bg-white/[.7] px-[0.75rem] py-[0.12rem] font-semibold leading-[1.4rem] text-point ">
             2/2
           </h3>
         </div>
-        <span className="text-sm font-semibold">
+        <span className="text-xs font-regular leading-5">
           내가 직접 채우는 나만의 번호 뽑기
         </span>
-        <div className="flex justify-center">
-          <Image
-            src="/img/img_ball_com_2.svg"
-            alt="img"
-            width={250}
-            height={0}
-            className="py-[0.94rem]"
-          />
-        </div>
-        <h3 className="text-center text-[0.75rem]">
-          다양한 방법으로 <b>로또 번호를 생성</b>해 볼 수 있어요.
-        </h3>
+        <Image
+          src="/img/img_ball_com_2.svg"
+          alt="img"
+          width={280}
+          height={0}
+          className="absolute bottom-11 left-6"
+        />
       </div>
     </>
   );

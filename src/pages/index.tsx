@@ -113,13 +113,13 @@ export function RecentLotteryCardComponent({
           checkNum={[]}
         />
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] text-base leading-[4rem] text-white">
-          <span className="font-semibold">1등 총상금</span>
+          <span className="font-semibold pt-[0.2rem]">1등 총상금
           {recentData.wins[0]?.num_winners}명/
           {formatMoney(
             recentData.wins[0]?.prize
               ? recentData.wins[0]?.prize / recentData.wins[0]?.num_winners
               : 0,
-          )}
+          )}</span>
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
             {formatMoney(recentData.wins[0]?.prize ?? 0)}
           </span>
@@ -196,8 +196,15 @@ export function CommunityCardComponent() {
             height={36}
             className="absolute bottom-[1.25rem] right-[1.25rem]"
           />
-          <div className="absolute bottom-[5.19rem] right-[1.69rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
-          <div className="absolute left-[0.87rem] top-[7.44rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
+          <Image
+            src="/img/icon_map.svg"
+            alt="img"
+            width={75}
+            height={40}
+            className="absolute bottom-[1.95rem] left-[1.25rem]"
+          />
+          <div className="absolute bottom-[6.25rem] left-[13.56rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
+          <div className="absolute left-[9.06rem] top-[7.44rem] h-[7.1875rem] w-[7.1875rem] rounded-full bg-point" />
         </div>
         <div
           className="relative h-[12.5rem] cursor-pointer rounded-[1.25rem] bg-gray_2 p-[1.25rem]"
