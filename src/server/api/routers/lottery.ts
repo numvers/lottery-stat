@@ -12,6 +12,33 @@ export const lotteryRouter = createTRPCRouter({
       orderBy: [desc(numbers.pickedDate)],
     });
   }),
+  searchAllNumbers: publicProcedure
+    .input(z.object({ numbers: z.number().array() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.numbers
+        .findMany({
+          orderBy: [desc(numbers.pickedDate)],
+        })
+        .then((nums) =>
+          nums
+            .map((num) => ({
+              lottery: num,
+              numbers: [
+                num.first,
+                num.second,
+                num.third,
+                num.forth,
+                num.fifth,
+                num.sixth,
+                num.bonus,
+              ],
+            }))
+            .filter((num) =>
+              input.numbers.every((inNumber) => num.numbers.includes(inNumber)),
+            )
+            .map((num) => num.lottery),
+        );
+    }),
   findLottery: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.lotteryStatLotteries.findMany({
       orderBy: [desc(lotteryStatLotteries.createdAt)],
