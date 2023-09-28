@@ -7,17 +7,11 @@ import {
   formatMoney,
   getEraseFourDigits,
 } from "../module/Util";
+import { type SelectNumber } from "../server/db/schema";
+import { api } from "../utils/api";
 
-interface LotteryResult {
-  round: number;
-  date: string;
-  numbers: number[];
-  wins: {
-    num_winners: number;
-    prize: number;
-  }[];
-}
-export default function Home({ allData }: { allData: LotteryResult[] }) {
+export default function Home() {
+  const query = api.lottery.findAllNumbers.useQuery();
   // 등수별 당첨금액/닫기 버튼 상태 state
   const [isCardClick, setIsCardClick] = useState(false);
   // 등수별 당첨금액/닫기 버튼 핸들러
@@ -51,12 +45,12 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               />
               {calculateTimeRemaining()}
             </h3>
-            {isCardClick ? (
-              <RecentLotteryListCardComponent allData={allData} />
+            {isCardClick && query.data ? (
+              <RecentLotteryListCardComponent allData={query.data} />
             ) : (
               // 최근 당첨결과 카드 컴포넌트
-              allData[0] && (
-                <RecentLotteryCardComponent recentData={allData[0]} />
+              query.data?.[0] && (
+                <RecentLotteryCardComponent recentData={query.data[0]} />
               )
             )}
             {/* 등수별 당첨금액 / 닫기 버튼 */}
@@ -90,13 +84,13 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
 export function RecentLotteryCardComponent({
   recentData,
 }: {
-  recentData: LotteryResult;
+  recentData: SelectNumber;
 }) {
   return (
     <>
       <div className="relative h-[13.75rem] rounded-[1.25rem] bg-white py-[1.875rem] text-black">
         <h2 className="mb-[0.625rem] text-sm text-gray_3">
-          {formatDate(recentData.date)} 추첨
+          {formatDate(recentData.pickedDate)} 추첨
         </h2>
         <div className="mb-[1.25rem] flex  items-center justify-center text-xl font-bold">
           <h2 className="">
@@ -104,20 +98,26 @@ export function RecentLotteryCardComponent({
           </h2>
         </div>
         <LotteryNumberBall
-          numbers={recentData.numbers}
+          numbers={[
+            recentData.first,
+            recentData.second,
+            recentData.third,
+            recentData.forth,
+            recentData.fifth,
+            recentData.sixth,
+            recentData.bonus,
+          ]}
           bonus={true}
           checkNum={[]}
         />
         <h3 className="via-transparent absolute bottom-0 flex h-[4rem] w-full items-center justify-center rounded-[1.25rem] bg-gradient-to-r from-[#4B2EFD] to-[#C623FF] text-base leading-[4rem] text-white">
           <span className="font-semibold">1등 총상금</span>
-          {recentData.wins[0]?.num_winners}명/
+          {recentData.numFirstWinners}명/
           {formatMoney(
-            recentData.wins[0]?.prize
-              ? recentData.wins[0]?.prize / recentData.wins[0]?.num_winners
-              : 0,
+            Number(recentData.firstPrize) / recentData.numFirstWinners,
           )}
           <span className="ml-[0.625rem] inline-block text-xxl font-semibold">
-            {formatMoney(recentData.wins[0]?.prize ?? 0)}
+            {formatMoney(Number(recentData.firstPrize))}
           </span>
         </h3>
       </div>
@@ -129,7 +129,7 @@ export function RecentLotteryCardComponent({
 export function RecentLotteryListCardComponent({
   allData,
 }: {
-  allData: LotteryResult[];
+  allData: SelectNumber[];
 }) {
   return (
     <>
@@ -148,10 +148,10 @@ export function RecentLotteryListCardComponent({
               >
                 <li className="col-start-1 font-semibold">{idx + 1}</li>
                 <li className="col-span-2 col-start-2 font-regular">
-                  {getEraseFourDigits(item.wins[0]?.prize)}원
+                  {getEraseFourDigits(Number(item.firstPrize))}원
                 </li>
                 <li className="col-start-4 font-regular">
-                  {item.wins[0]?.num_winners}
+                  {item.numFirstWinners}
                 </li>
               </ul>
             );
@@ -237,24 +237,4 @@ export function CommunityCardComponent() {
       </div>
     </div>
   );
-}
-
-function getLotteryResult(): Promise<LotteryResult[]> {
-  return fetch(
-    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
-  )
-    .then((res) => res.json())
-    .then((res) => {
-      return res as LotteryResult[];
-    });
-}
-
-// TODO: 성능 개선
-export async function getServerSideProps() {
-  const allData = await getLotteryResult();
-  return {
-    props: {
-      allData: allData.slice(0, 10),
-    },
-  };
 }

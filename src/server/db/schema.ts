@@ -56,6 +56,8 @@ export const numbers = mysqlTable("numbers", {
   bonus: tinyint("bonus").notNull(),
 });
 
+export type SelectNumber = typeof numbers.$inferSelect;
+
 export const nicknames = mysqlTable(
   "nicknames",
   {
