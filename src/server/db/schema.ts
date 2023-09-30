@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  bigint,
   int,
   mysqlTableCreator,
   primaryKey,
@@ -32,6 +33,30 @@ export const lotteryStatLotteries = mysqlTable(
     };
   },
 );
+
+export const numbers = mysqlTable("numbers", {
+  round: int("round").notNull(),
+  pickedDate: timestamp("picked_date", { mode: "string" }).notNull(),
+  numFirstWinners: int("num_first_winners").notNull(),
+  numSecondWinners: int("num_second_winners").notNull(),
+  numThirdWinners: int("num_third_winners").notNull(),
+  numForthWinners: int("num_forth_winners").notNull(),
+  numFifthWinners: int("num_fifth_winners").notNull(),
+  firstPrize: bigint("first_prize", { mode: "bigint" }).notNull(),
+  secondPrize: bigint("second_prize", { mode: "bigint" }).notNull(),
+  thirdPrize: bigint("third_prize", { mode: "bigint" }).notNull(),
+  forthPrize: bigint("forth_prize", { mode: "bigint" }).notNull(),
+  fifthPrize: bigint("fifth_prize", { mode: "bigint" }).notNull(),
+  first: tinyint("first").notNull(),
+  second: tinyint("second").notNull(),
+  third: tinyint("third").notNull(),
+  forth: tinyint("forth").notNull(),
+  fifth: tinyint("fifth").notNull(),
+  sixth: tinyint("sixth").notNull(),
+  bonus: tinyint("bonus").notNull(),
+});
+
+export type SelectNumber = typeof numbers.$inferSelect;
 
 export const nicknames = mysqlTable(
   "nicknames",
