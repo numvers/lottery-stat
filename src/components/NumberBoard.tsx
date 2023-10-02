@@ -1,5 +1,3 @@
-import { getIncludeParams } from "~/module/Util";
-
 interface LotteryResult {
   round: number;
   date: string;
@@ -15,11 +13,13 @@ export default function NumberBoard({
   setCheckNum,
   setData,
   setIsMultiCheck,
+  allData,
 }: {
   checkNum: (number | boolean)[];
   setCheckNum: React.Dispatch<React.SetStateAction<(number | boolean)[]>>;
   setData: React.Dispatch<React.SetStateAction<LotteryResult[]>>;
   setIsMultiCheck: (isMultiCheck: boolean) => void;
+  allData: LotteryResult[];
 }) {
   const numbers = Array.from(Array(45), (_, i) => i + 1);
 
@@ -45,18 +45,16 @@ export default function NumberBoard({
   };
 
   // 번호 선택 후 적용
-  const numChoiceHandler = async () => {
+  const numChoiceHandler = () => {
     if (checkNum.length < 1) {
       alert("번호를 선택해주세요.");
       return;
     } else {
-      const response = await fetch(
-        `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
-          checkNum as number[],
-        )}`,
+      const nums = checkNum as number[];
+      const newData = allData.filter((data) =>
+        nums.every((s) => data.numbers.includes(s)),
       );
-      const result = (await response.json()) as LotteryResult[];
-      setData(result);
+      setData(newData);
       setIsMultiCheck(false);
     }
   };
