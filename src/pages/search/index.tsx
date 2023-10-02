@@ -253,6 +253,7 @@ export default function Home(
                   setCheckNum={setCheckNum}
                   setData={setData}
                   setIsMultiCheck={setIsMultiCheck}
+                  allData={props.allData}
                 />
               </div>
             )}
