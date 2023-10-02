@@ -1,19 +1,21 @@
-import { GetServerSidePropsContext } from "next";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import superjson from "superjson";
 import LotteryDetailModal from "~/components/LotteryDetailModal";
 import LotteryNumberBall from "~/components/LotteryNumberBall";
 import NumberBoard from "~/components/NumberBoard";
 import useIntersectionObserver from "~/hooks/useIntersectionObserver";
-import {
-  formatDate,
-  formatMoney,
-  getEraseFourDigits,
-  getIncludeParams,
-  getIncludeParamsArray,
-} from "~/module/Util";
+import { formatDate, formatMoney, getEraseFourDigits } from "~/module/Util";
+import { appRouter } from "../../server/api/root";
+import { db } from "../../server/db";
+import { type SelectNumber } from "../../server/db/schema";
 
 interface LotteryResult {
   round: number;
@@ -25,7 +27,9 @@ interface LotteryResult {
   }[];
 }
 
-export default function Home({ allData }: { allData: LotteryResult[] }) {
+export default function Home(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
   const router = useRouter();
 
   // 로또 조회
@@ -39,7 +43,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // 보너스 번호 제외 상태 state
   const [isBonus, setIsBonus] = useState(false);
   // 번호 선택 후 받는 배열값
-  const [data, setData] = useState<LotteryResult[]>([]);
+  const [data, setData] = useState<LotteryResult[]>(props.allData);
   const [checkNum, setCheckNum] = useState<(number | boolean)[]>([]);
   // Infinite scroll
   const [isLoaded, setIsLoaded] = useState(false);
@@ -67,7 +71,8 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
     const value = Number((event.target as HTMLButtonElement).value);
 
     // allData와 data를 합친 새로운 배열을 생성
-    const combinedData = allData.length > 0 ? [...allData] : [...data];
+    const combinedData =
+      props.allData.length > 0 ? [...props.allData] : [...data];
 
     // value 위치의 데이터를 가져와서 배열 형태로 설정
     const selectedData = combinedData[value];
@@ -95,7 +100,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   // 회차선택 핸들러
   const roundHandler = (e: React.MouseEvent<HTMLElement>) => {
     const value = (e.target as HTMLButtonElement).value;
-    setItemIndex(allData.length - Number(value));
+    setItemIndex(props.allData.length - Number(value));
     setIsRoundClick(false);
   };
 
@@ -109,18 +114,19 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
   };
 
   // 번호 검색으로 로또 정보 얻기 핸들러
-  const getDetailData = async () => {
+  const getDetailData = () => {
     // searchKeyword -> number[]
     try {
       // <- - >...
-      const response = await fetch(
-        `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParamsArray(
-          searchKeyword,
-        )}`,
+      const searchNums = searchKeyword
+        .split(/[\s,-]+/)
+        .map((term) => Number(term))
+        .filter((num) => num && num > 0);
+
+      const newData = props.allData.filter((data) =>
+        searchNums.every((s) => data.numbers.includes(s)),
       );
-      // <- - >... json
-      const result = (await response.json()) as LotteryResult[];
-      setData(result);
+      setData(newData);
     } catch (error) {
       console.error(error);
     }
@@ -169,27 +175,6 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    // 번호 검색으로 로또 정보 얻기 핸들러
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries?${getIncludeParams(
-            checkNum as number[],
-          )}`,
-        );
-        const result = (await response.json()) as LotteryResult[];
-        setData(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData().catch((error) => {
-      console.error(error);
-    });
-  }, [checkNum]);
 
   // 모달창 띄우기
   useEffect(() => {
@@ -316,7 +301,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               </button>
               {isRoundClick && (
                 <ul className="absolute top-[2.4rem] z-[99] mt-2 h-[7.75rem] overflow-y-scroll rounded-[0.63rem] bg-gray_4 px-[1.69rem] scrollbar-hide">
-                  {allData?.map((item, idx) => {
+                  {props.allData?.map((item, idx) => {
                     return (
                       <button
                         value={item.round}
@@ -332,7 +317,7 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
               )}
             </div>
           </div>
-          {(data.length === 0 ? allData : data)
+          {(data.length === 0 ? props.allData : data)
             .filter((_, index) => index >= itemIndex)
             .map((item, idx) => {
               return (
@@ -415,19 +400,64 @@ export default function Home({ allData }: { allData: LotteryResult[] }) {
 }
 
 export async function getServerSideProps(props: GetServerSidePropsContext) {
+  const helpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: { session: null, db: db },
+    transformer: superjson,
+  });
+
+  const allData = await helpers.lottery.findAllNumbers
+    .fetch()
+    .then((res) => res.map((v) => fromSelectNumber(v)));
+
   props.res.setHeader(
     "Cache-Control",
     "public, s-maxage=3600, stale-while-revalidate=3600",
   );
   // 전체 당첨번호 조회
-  const allResponse = await fetch(
-    "http://ec2-3-34-179-50.ap-northeast-2.compute.amazonaws.com:8080/lotteries",
-  );
 
-  const allData = (await allResponse.json()) as LotteryResult;
   return {
     props: {
+      trpcState: helpers.dehydrate(),
       allData,
     },
+  };
+}
+
+function fromSelectNumber(num: SelectNumber): LotteryResult {
+  return {
+    round: num.round,
+    date: num.pickedDate,
+    wins: [
+      {
+        num_winners: num.numFirstWinners,
+        prize: Number(num.firstPrize),
+      },
+      {
+        num_winners: num.numSecondWinners,
+        prize: Number(num.secondPrize),
+      },
+      {
+        num_winners: num.numThirdWinners,
+        prize: Number(num.thirdPrize),
+      },
+      {
+        num_winners: num.numForthWinners,
+        prize: Number(num.forthPrize),
+      },
+      {
+        num_winners: num.numFifthWinners,
+        prize: Number(num.fifthPrize),
+      },
+    ],
+    numbers: [
+      num.first,
+      num.second,
+      num.third,
+      num.forth,
+      num.fifth,
+      num.sixth,
+      num.bonus,
+    ],
   };
 }
